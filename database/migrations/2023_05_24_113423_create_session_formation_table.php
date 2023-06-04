@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('session_formations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
+           
+            $table->unsignedInteger('groupe_id');
+            $table->unsignedInteger('salle_id');
+            $table->unsignedInteger('plan_formation_id');
+            $table->foreign('groupe_id')->references('id')->on('groupes')->onDelete('cascade');
+            $table->foreign('salle_id')->references('id')->on('salles')->onDelete('cascade');
+            $table->foreign('plan_formation_id')->references('id')->on('plan_formations')->onDelete('cascade');
+          
+        
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('session_formations');
+    }
+};
