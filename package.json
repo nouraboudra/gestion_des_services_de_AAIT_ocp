@@ -12,6 +12,7 @@
     "production": "mix --production"
   },
   "dependencies": {
+    "@enso-ui/select": "github:enso-ui/select",
     "@popperjs/core": "^2.9.2",
     "apexcharts-clevision": "^3.28.3",
     "bootstrap": "~5.1.3",

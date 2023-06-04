@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc9b981e4add39293bbb457c4090eb18",
+    "content-hash": "8d129dd0c99f546f0de2aa3ea5207582",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1109,6 +1109,236 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
+        },
+        {
+            "name": "laravel-enso/enums",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/enums.git",
+                "reference": "7a5f0a216a4c11b4e721cc7dda30928e80af3598"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/enums/zipball/7a5f0a216a4c11b4e721cc7dda30928e80af3598",
+                "reference": "7a5f0a216a4c11b4e721cc7dda30928e80af3598",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^7.0|^8.0|^9.0",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelEnso\\Enums\\AppServiceProvider",
+                        "LaravelEnso\\Enums\\EnumServiceProvider"
+                    ],
+                    "aliases": {
+                        "Enums": "LaravelEnso\\Enums\\Facades\\Enums"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Enums\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Reza Fouladi",
+                    "email": "raftx24@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Enums for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/enums",
+            "keywords": [
+                "enums",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/enums/issues",
+                "source": "https://github.com/laravel-enso/enums/tree/2.2.0"
+            },
+            "time": "2022-03-02T11:55:07+00:00"
+        },
+        {
+            "name": "laravel-enso/filters",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/filters.git",
+                "reference": "706f09567ee94d54b88a1baac3cda9e9183212e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/filters/zipball/706f09567ee94d54b88a1baac3cda9e9183212e2",
+                "reference": "706f09567ee94d54b88a1baac3cda9e9183212e2",
+                "shasum": ""
+            },
+            "require": {
+                "laravel-enso/helpers": "^2.0",
+                "laravel/framework": "^9.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Filters\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Filters dependency for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/filters",
+            "keywords": [
+                "date-interval",
+                "filters",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/filters/issues",
+                "source": "https://github.com/laravel-enso/filters/tree/2.1.1"
+            },
+            "time": "2022-03-06T10:40:53+00:00"
+        },
+        {
+            "name": "laravel-enso/helpers",
+            "version": "2.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/helpers.git",
+                "reference": "afc599ef69603534b12f3e43b9caeb57bbd97166"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/helpers/zipball/afc599ef69603534b12f3e43b9caeb57bbd97166",
+                "reference": "afc599ef69603534b12f3e43b9caeb57bbd97166",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "EnsoException": "LaravelEnso\\Helpers\\Exceptions\\EnsoException"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Helpers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Helper classes dependency for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/helpers",
+            "keywords": [
+                "helpers",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/helpers/issues",
+                "source": "https://github.com/laravel-enso/helpers/tree/2.9.1"
+            },
+            "time": "2023-02-02T10:51:32+00:00"
+        },
+        {
+            "name": "laravel-enso/select",
+            "version": "4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/select.git",
+                "reference": "655a15677f7f787488244c78860e870276b58d25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/select/zipball/655a15677f7f787488244c78860e870276b58d25",
+                "reference": "655a15677f7f787488244c78860e870276b58d25",
+                "shasum": ""
+            },
+            "require": {
+                "laravel-enso/filters": "^2.0",
+                "laravel-enso/helpers": "^2.0",
+                "laravel/framework": "^9.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelEnso\\Select\\AppServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Select\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bootstrap Select data builder with server-side data fetching capability and a VueJS component",
+            "homepage": "https://github.com/laravel-enso/select",
+            "keywords": [
+                "bootstrap-select",
+                "laravel-enso",
+                "select",
+                "select-server-side"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/select/issues",
+                "source": "https://github.com/laravel-enso/select/tree/4.2.1"
+            },
+            "time": "2023-03-21T19:08:03+00:00"
         },
         {
             "name": "laravel/framework",

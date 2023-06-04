@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('candidat_ecosystems', function (Blueprint $table) {
+        Schema::create('candidat_ecosystemes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('CIN')->unique();
             $table->string('Entreprise_actuelle');
@@ -31,6 +31,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('candidat_ecosystems');
+        Schema::dropIfExists('candidat_ecosystemes');
     }
 };
