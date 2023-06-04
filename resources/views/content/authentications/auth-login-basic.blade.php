@@ -28,10 +28,11 @@
                         <h4 class="mb-2">Bienvenue ! 👋</h4>
                         <p class="mb-4">Connectez-vous à votre compte et commencez l'aventure</p>
 
-                        <form id="formAuthentication" class="mb-3" action="{{ url('/') }}" method="POST">
+                        <form id="formAuthentication" class="mb-3" action="{{ route('post-auth-login-basic')}}" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="ID" class="form-label">ID </label>
-                                <input type="text" class="form-control" id="email" name="ID"
+                                <input type="text" class="form-control" id="email" name="matricule"
                                     placeholder="Entrer votre ID" autofocus>
                             </div>
                             <div class="mb-3 form-password-toggle">

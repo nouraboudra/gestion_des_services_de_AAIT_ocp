@@ -17,14 +17,15 @@
       <div class="card">
         <div class="card-body">
           <!-- Logo -->
-          <div class="app-brand justify-content-center">
-            <a href="{{url('/')}}" class="app-brand-link gap-2">
-              <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])</span>
-              <span class="app-brand-text demo text-body fw-bolder">{{config('variables.templateName')}}</span>
+          <div class="app-brand" style="display: flex; justify-content: center;">
+            <a href="{{ url('/') }}" class="app-brand-link gap-2">
+                <span class="demo mx-auto d-block">
+                    <img src="{{ asset('assets/img/app/logo.png') }}" alt="Logo" style="width: 50%; display: block; margin: 0 auto;">
+                </span> 
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-2">Adventure starts here 🚀</h4>
+          <h4 class="mb-2"></h4>
           <p class="mb-4">Make your app management easy and fun!</p>
 
           <form id="formAuthentication" class="mb-3" action="{{url('/')}}" method="GET">
