@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Formation extends Model
 {
@@ -27,4 +28,10 @@ class Formation extends Model
     {
         return $this->hasMany(Certificate::class);
     }
+
+    public function candidats(): BelongsToMany
+    {
+        return $this->belongsToMany(Candidat::class, 'candidat_formation', 'formation_id', 'candidat_id');
+    }
+
 }

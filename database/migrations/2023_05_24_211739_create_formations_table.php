@@ -12,11 +12,9 @@ return new class extends Migration
             $table->increments('id');
             $table->string('Intitulé');
             $table->string('formationable_type');
-            $table->integer('formationable_id');
-            
+            $table->integer('formationable_id');            
             $table->unsignedInteger('plan_formation_id');
             $table->foreign('plan_formation_id')->references('id')->on('plan_formations')->onDelete('cascade');
-       
             $table->timestamps();
         });
     }

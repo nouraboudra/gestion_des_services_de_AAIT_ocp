@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Candidat extends Model
 {
@@ -30,6 +31,10 @@ class Candidat extends Model
     
     public function groupe() {
         return $this->belongsToMany(Groupe::class);
+    }
+    public function formation(): BelongsToMany
+    {
+        return $this->belongsToMany(Formation::class, 'candidat_formation', 'candidat_id', 'formation_id');
     }
 
 
