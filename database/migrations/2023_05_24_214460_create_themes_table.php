@@ -13,7 +13,6 @@ return new class extends Migration
             $table->string('nom');
             $table->unsignedInteger('domain_id');
             $table->foreign('domain_id')->references('id')->on('domains')->onDelete('cascade');
-        
             $table->timestamps();
         });
     }

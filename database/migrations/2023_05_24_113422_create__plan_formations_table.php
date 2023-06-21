@@ -12,12 +12,10 @@ return new class extends Migration
             $table->increments('id');
             $table->date('date_debut');
             $table->date('date_fin');
-
-
+            $table->unsignedInteger('formation_id');
             $table->unsignedBigInteger('planificateur_id');
-            $table->foreign('planificateur_id')->references('id')->on('planificateurs')->onDelete('cascade');
-           
-
+            $table->foreign('planificateur_id')->references('id')->on('planificateurs')->onDelete('set null');
+            $table->foreign('formation_id')->references('id')->on('formations')->onDelete('cascade');
             $table->timestamps();
         });
     }

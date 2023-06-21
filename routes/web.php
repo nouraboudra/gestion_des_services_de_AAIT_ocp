@@ -4,7 +4,7 @@ use App\Http\Controllers\admin\RolesController;
 use App\Http\Controllers\admin\SalleController;
 use App\Http\Controllers\candidat\CandidatEcosystemeController;
 use App\Http\Controllers\candidat\CandidatOcpController;
-
+use App\Http\Controllers\planification\PlanificationController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
@@ -153,7 +153,8 @@ Route::delete('admin/salles/{id}', [SalleController::class, 'destroy'])->name('a
 Route::get('admin/salles/{id}/edit', [SalleController::class, 'edit'])->name('admin.salles.edit');
 Route::put('admin/salles/{id}', [SalleController::class, 'update'])->name('admin.salles.update');
 
-
+//mail
+Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
 
 
 // form layouts
@@ -165,3 +166,7 @@ Route::get('/tables/basic', [Basic::class, 'index'])->name('tables-basic');
 Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
 
 
+//planification
+Route::get('planifications', [PlanificationController::class, 'index'])->name('planification.index');
+Route::get('plan/planifications/create', [PlanificationController::class, 'create'])->name('planification.create');
+Route::post('plan/planifications', [PlanificationController::class, 'store'])->name('planification.store');

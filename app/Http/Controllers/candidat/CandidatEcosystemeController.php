@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUserNotification;
+
 
 use Illuminate\Support\Facades\Hash;
 
@@ -104,6 +107,17 @@ class CandidatEcosystemeController extends Controller
         }
     }
         toastr()->success("utilisateur créer avec succes");
+        // Send email notification to the user
+        $matricule = $request->input('matricule');
+        $password = $request->input('password');
+        $email = $request->input('email');
+
+        $data = [
+            'matricule' => $matricule,
+            'password' => $password,
+        ];
+
+        Mail::to($email)->send(new NewUserNotification($data));
     // Redirect or perform any other actions as needed
     return redirect()-> route('candidatEcosysteme.index');
     }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PlanFormation extends Model
 {
@@ -24,7 +25,7 @@ class PlanFormation extends Model
     public function planificateur() {
         return $this->belongsTo(Planificateur::class);
     }
-    public function formation()
+    public function formation() : HasOne
     {
         return $this->hasone(Formation::class);
     }
