@@ -15,6 +15,8 @@ class CandidatOcp extends Model
         'GROUPE_Professionnel',
         'service',
         'Direction',
+        'Societe',
+        'Matricule'
     ];
 
     public function candidat()

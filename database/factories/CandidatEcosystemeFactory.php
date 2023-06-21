@@ -32,7 +32,7 @@ class CandidatEcosystemeFactory extends Factory
             'Organismes_de_diplôme' => $this->faker->company,
             'Organisme_de_formation' => $this->faker->company,
             'Langues' => $this->faker->randomElement(['Français', 'Arabe', 'Anglais']),
-            'first_time' => $this->faker->boolean,
+            'first_time' => true,
         ];
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\authentications;
 
 use App\Http\Controllers\Controller;
+use App\Models\CandidatEcosysteme;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class LoginBasic extends Controller
 {
@@ -15,21 +18,51 @@ class LoginBasic extends Controller
   }
   public function authenticate(Request $request)
   {
-    validator(request()->all(), [
+    $rules = [
       'matricule' => ['required'],
       'password' => ['required']
-    ])->validate();
+    ];
+    $messages = [
+      'matricule.required' => "Le champ Matricule est obligatoire.",
+      'password.required' => "Le champ Mot de passe est obligatoire."
+    ];
+    $validator = Validator::make($request->all(), $rules, $messages);
+    
+    if ($validator->fails()) {
+      
+      $errors = $validator->errors()->all();
+
+      if (isset($errors[0])) {
+        toastr()->error($errors[0]);
+      }
+
+      if (isset($errors[1])) {
+        toastr()->error($errors[1]);
+      }
+
+      if (isset($errors[2])) {
+        toastr()->error($errors[2]);
+      }
+      return redirect()->back()->withErrors($validator)->withInput();
+    }
+    
+    $userId = $request->input('matricule');
+    $user = User::where('Matricule', $userId)->first(); //to do
     $credentials = $request->only('matricule', 'password');
     $rememberMe = $request->filled('remember-me');
 
 
     if (Auth::attempt($credentials, $rememberMe)) {
-
-      toastr()->success('welcome '.Auth::user()->nom);
+      $user = Auth::user();
+      $candidat_ecosysteme = CandidatEcosysteme::where('cin', $user->Matricule)->first();
+      if ($candidat_ecosysteme && $candidat_ecosysteme->first_time) {
+        return redirect()->route('auth-register-basic', $userId);
+      }
+      toastr()->success('Bienvenue ' . Auth::user()->nom);
       return redirect()->route('dashboard-analytics');
     }
     toastr()->error('verifier votre crédentiel');
-
+   
     return redirect()->route("auth-login-basic")->with('errors', "verifier votre crédentiel");
   }
 

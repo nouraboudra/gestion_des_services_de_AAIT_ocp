@@ -18,6 +18,7 @@ class CandidatEcosysteme extends Model
         'Niveau_scolaire',
         'Diplôme',
         'Spécialité',
+        'Societe',
         'Organismes_de_diplôme',
         'formations',
         'Organisme_de_formation',
@@ -28,4 +29,4 @@ class CandidatEcosysteme extends Model
     {
         return $this->morphOne(Candidat::class, 'candidatable');
     }
-}
+}  

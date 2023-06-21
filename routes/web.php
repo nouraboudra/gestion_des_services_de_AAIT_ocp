@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\admin\RolesController;
+use App\Http\Controllers\admin\SalleController;
+use App\Http\Controllers\candidat\CandidatEcosystemeController;
+use App\Http\Controllers\candidat\CandidatOcpController;
+
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -7,8 +13,7 @@ use App\Http\Controllers\layouts\WithoutNavbar;
 use App\Http\Controllers\layouts\Fluid;
 use App\Http\Controllers\layouts\Container;
 use App\Http\Controllers\layouts\Blank;
-use App\Http\Controllers\pages\AccountSettingsAccount;
-use App\Http\Controllers\pages\AccountSettingsNotifications;
+
 use App\Http\Controllers\pages\AccountSettingsConnections;
 use App\Http\Controllers\pages\MiscError;
 use App\Http\Controllers\pages\MiscUnderMaintenance;
@@ -38,8 +43,18 @@ use App\Http\Controllers\user_interface\Typography;
 use App\Http\Controllers\extended_ui\PerfectScrollbar;
 use App\Http\Controllers\extended_ui\TextDivider;
 use App\Http\Controllers\icons\Boxicons;
-use App\Http\Controllers\form_elements\BasicInput;
+use App\Http\Controllers\form_elements\Useradd;
 use App\Http\Controllers\form_elements\InputGroups;
+
+
+
+
+
+use App\Http\Controllers\form_elements\Role;
+
+use App\Http\Controllers\Admin\Showuser;
+use App\Http\Controllers\admin\UsersController;
+
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic;
@@ -55,17 +70,28 @@ Route::get('/layouts/container', [Container::class, 'index'])->name('layouts-con
 Route::get('/layouts/blank', [Blank::class, 'index'])->name('layouts-blank');
 
 // pages
-Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
-Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
 Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
 Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
 Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
 
+// candidat managemnet : 
+//candidatEcosysteme management
+Route::resource('candidat/candidatEcosysteme', CandidatEcosystemeController::class);
+//candidatOcp management
+Route::resource('candidat/candidatOcp', CandidatOcpController::class);
+
+Route::get('/download-example', function () {
+    $path = public_path('doc/example.xlsx');
+    return response()->download($path);
+})->name('download.example');
+
+
 // authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
+Route::get('/login', [LoginBasic::class, 'index']);
 Route::post('/auth/login-basic', [LoginBasic::class, 'authenticate'])->name('post-auth-login-basic');
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-Route::post('/auth/register-basic', [RegisterBasic::class, 'store']);
+Route::get('/auth/register-basic/{userId}', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('post-auth-register-basic');
 Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 
 // cards
@@ -100,8 +126,35 @@ Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('ex
 Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons');
 
 // form elements
-Route::get('/forms/basic-inputs', [BasicInput::class, 'index'])->name('forms-basic-inputs');
+
 Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
+
+
+//for admin :
+//roles
+Route::get('admin/roles', [RolesController::class, 'index'])->name('admin.roles.index');
+Route::get('admin/roles/create', [RolesController::class, 'create'])->name('roles.create');
+Route::get('admin/roles/{id}', [RolesController::class, 'show'])->name('roles.show');
+Route::post('admin/roles', [RolesController::class, 'store'])->name('roles.store');
+Route::delete('admin/roles/{id}', [RolesController::class, 'destroy'])->name('roles.delete');
+Route::get('admin/roles/{id}/edit', [RolesController::class, 'edit'])->name('roles.edit');
+//users
+Route::get('admin/users', [UsersController::class, 'index'])->name('admin.users.index');
+Route::get('admin/users/create', [UsersController::class, 'create'])->name('users.create');
+Route::get('admin/users/{id}', [UsersController::class, 'show'])->name('users.show');
+Route::delete('admin/users/{id}', [UsersController::class, 'destroy'])->name('users.delete');
+Route::post('admin/users', [UsersController::class, 'store'])->name('users.store');
+
+//salles
+Route::get('admin/salles', [SalleController::class, 'index'])->name('admin.salles.index');
+Route::get('admin/salles/create', [SalleController::class, 'create'])->name('salles.create');
+Route::post('admin/salles', [SalleController::class, 'store'])->name('salles.store');
+Route::delete('admin/salles/{id}', [SalleController::class, 'destroy'])->name('admin.salles.destroy');
+Route::get('admin/salles/{id}/edit', [SalleController::class, 'edit'])->name('admin.salles.edit');
+Route::put('admin/salles/{id}', [SalleController::class, 'update'])->name('admin.salles.update');
+
+
+
 
 // form layouts
 Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
@@ -109,4 +162,6 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 
 // tables
 Route::get('/tables/basic', [Basic::class, 'index'])->name('tables-basic');
+Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
+
 

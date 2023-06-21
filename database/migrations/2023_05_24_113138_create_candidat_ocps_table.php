@@ -10,12 +10,14 @@ return new class extends Migration
     {
         Schema::create('candidat_ocps', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Code_Emploi');
-            $table->string('Libelle_Code_Emploi');
-            $table->string('Niveau_code_Emploi');
-            $table->string('GROUPE_Professionnel');
-            $table->string('service');
-            $table->string('Direction');
+            $table->integer('Code_Emploi')->nullable();
+            $table->string('Matricule')->unique();
+            $table->string('Libelle_Code_Emploi')->nullable();
+            $table->string('Niveau_code_Emploi')->nullable();
+            $table->string('GROUPE_Professionnel')->nullable();
+            $table->string('service')->nullable();
+            $table->string('Direction')->nullable();
+            $table->string('Societe')->nullable();
             
             $table->timestamps();
         });
