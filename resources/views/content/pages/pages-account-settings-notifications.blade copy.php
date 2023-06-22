@@ -22,7 +22,7 @@
         <div class="error"></div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped table-borderless border-bottom">
+        <table class="table   table-striped table-borderless border-bottom">
           <thead>
             <tr>
               <th class="text-nowrap">Type</th>

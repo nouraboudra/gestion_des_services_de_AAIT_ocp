@@ -5,11 +5,10 @@
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><button class="nav-link {{ $showFormations ? 'active' : '' }}"  wire:click="showFormations()"><i class="bx bx-user me-1"></i> Formations</button></li>
-            <li class="nav-item"><button class="nav-link {{ $showThemes ? 'active' : '' }}" wire:click="showThemes()"><i class="bx bx-user me-1"></i> Theme</button></li>
+            <li class="nav-item"><button class="nav-link active"  wire:click="showFormations()"><i class="bx bx-user me-1"></i> Formations</button></li>
         </ul>
         <div class="card card-lg">
-            <h5 class="card-header">Les plans des formations</h5>
+            <h5 class="card-header">Les Formations </h5>
             <button type="button" style="width: 120px; align:right;"class="float-right btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalCenter">
                 ajouter
               </button>
@@ -18,7 +17,7 @@
                         
                     <!-- Table body -->
                     <div>
-                        <table class="table">
+                        <table class="table  ">
                             <thead>
                                 <tr>
                                     <th>Intitulé</th>
@@ -31,8 +30,8 @@
                                 @forelse($formations as $formation)
                                 <tr>
                                     <td><a href="{{ route("planing.sessions.index",$formation->id ) }}">{{ $formation->Intitulé }}</a></td>
-                                    <td>{{ $formation->date_debut }}</td>
-                                    <td>{{ $formation->date_fin }}</td>
+                                    <td>{{  date("d-m-Y", strtotime($formation->date_debut)) }}</td>
+                                    <td>{{ date("d-m-Y", strtotime($formation->date_fin))}}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>

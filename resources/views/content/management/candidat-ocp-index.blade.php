@@ -20,7 +20,7 @@
     <div class="card mb-4">
       
       <div class="table-responsive text-nowrap">
-        <table class="table">
+        <table class="table  ">
           <thead>
             <tr>
               <th>ID</th>

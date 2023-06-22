@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="table-responsive table text-nowrap">
-        <table class=" table">
+        <table class=" table  ">
             <thead>
                 <tr>
                     <th>Matricule</th>

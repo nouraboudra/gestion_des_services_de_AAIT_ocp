@@ -37,7 +37,7 @@
     <div class="ta text-nowrap">
 
         <!-- Table body -->
-        <table class="table">
+        <table class="table  ">
             <!-- Table headers -->
             <thead>
                 <tr>

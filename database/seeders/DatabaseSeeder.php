@@ -25,8 +25,9 @@ class DatabaseSeeder extends Seeder
         //$this->call(TypesSalleSeeder::class);
         //$this->call(EcosystemSeeder::class);
        // $this->call(CandidatOcpSeeder::class);
-        $this->call(FormationSeeder::class);
-        
-        
+        //$this->call(FormationSeeder::class);
+        $this->call(SalleSeeder::class);
+        //$this->call(GroupeSeeder::class);
+
     }
 }

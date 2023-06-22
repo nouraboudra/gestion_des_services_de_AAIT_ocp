@@ -57,7 +57,7 @@ mix.webpackConfig({
   externals: {
     jquery: 'jQuery',
     moment: 'moment',
-    'datatables.net': '$.fn.dataTable',
+    ' s.net': '$.fn. ',
     jsdom: 'jsdom',
     velocity: 'Velocity',
     hammer: 'Hammer',

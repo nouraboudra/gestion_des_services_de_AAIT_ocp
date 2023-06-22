@@ -83,11 +83,18 @@
           "name": "Formations",
           "slug": "planing.formations.index"
         },
+
         {
-          "url": "planing/sessions",
-          "name": "Sessions",
-          "slug": "planing.sessions.index"
-        }     
+          "url": "planing/themes",
+          "name": "Thémes",
+          "slug": "planing.themes.index"
+        },
+        
+        {
+          "url": "planing/domaines",
+          "name": "Domaines",
+          "slug": "planing.domaines.index"
+        } 
       ]
     },
     {

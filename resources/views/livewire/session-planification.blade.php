@@ -1,3 +1,4 @@
+
 <h4 class="fw-bold py-3 mb-4">
     <span class="text-muted fw-light">Planification /</span>  Sessions
 </h4>
@@ -5,11 +6,10 @@
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item"><button class="nav-link " ><i class="bx bx-user me-1"></i> Formations</button></li>
-            <li class="nav-item"><button class="nav-link active" ><i class="bx bx-user me-1"></i> Theme</button></li>
+            <li class="nav-item"><a href="{{ route('planing.formations.index') }}" class="nav-link " ><i class="bx bx-user me-1"></i> Formations</a></li>
         </ul>
         <div class="card card-lg">
-            <h5 class="card-header">Les plans des formations</h5>
+            <h5 class="card-header">Planing du {{ $formation->Intitulé }}</h5>
             <button type="button" style="width: 120px; align:right;"class="float-right btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalCenter">
                 ajouter
               </button>
@@ -18,12 +18,11 @@
                         
                     <!-- Table body -->
                     <div>
-                        <table class="table">
+                        <table class="table  ">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Date Début</th>
-                                    <th>Date Fin</th>
+                                    <th>Date</th>
                                     <th>Groupe</th>
                                     <th>Salle</th>
                                     <th>Formation</th>
@@ -34,16 +33,15 @@
                                 @forelse($sessions as $session)
                                 <tr>
                                     <td>{{ $session->id }}</td>
-                                    <td>{{ $session->date_debut }}</td>
-                                    <td>{{ $session->date_fin }}</td>
-                                    <td>{{ $session->groupe_id }}</td>
-                                    <td>{{ $session->salle_id }}</td>
-                                    <td><a href="{{ route("planing.formations.show",$session->formation_id ) }}">{{ $session->formation_id }}</a></td>
+                                    <td>{{ date("d-m-Y", strtotime($session->date_debut)) }}</td>
+                                    <td>{{ $session->groupe->nom }}</td>
+                                    <td>{{ $session->salle->code }}</td>
+                                    <td>{{ $session->formation->Intitulé }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route("planing.sessions.edit", $session->id) }}"><i class="bx bx-edit-alt me-1"></i> Modifier</a>
+                                                <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i> Modifier</a>
                                                 <form action="{{ route("planing.sessions.destroy", $session->id) }}" method="POST">
                                                     @csrfè
                                                     @method('DELETE')
@@ -89,7 +87,7 @@
                           
                           
                                 <!-- Formation ID -->
-                                <input type="date" hidden id="formation_id" value="{{ $formation_id }}" class="form-control" name="formation_id">
+                                <input type="text" hidden id="formation_id" value="{{ $formationId }}" class="form-control" name="formation_id">
 
 
                                 <!-- Groupe ID -->
@@ -98,6 +96,16 @@
                                     <select class="form-select" id="groupe_id" name="groupe_id">
                                         @foreach($groupes as $groupe)
                                             <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Salle ID -->
+                                <div class="mb-3">
+                                    <label for="salle_id" class="form-label">Salle</label>
+                                    <select class="form-select" id="salle_id" name="salle_id">
+                                        @foreach($salles as $salle)
+                                            <option value="{{ $salle->id }}">{{ $salle->code }}</option>
                                         @endforeach
                                     </select>
                                 </div>

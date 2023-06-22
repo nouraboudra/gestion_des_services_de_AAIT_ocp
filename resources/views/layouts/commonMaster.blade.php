@@ -17,7 +17,14 @@
   <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/app/logo.png') }}" />
- 
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn. s.net/v/bs4/dt-1.10.25/ s.min.css"/>
+
+<link rel="stylesheet" type="text/css" href="https://cdn. s.net/1.10.8/css/jquery. s.min.css"/>
+
+
+
+
   @yield('head_includes')
   <!-- Include Styles -->
   @include('layouts/sections/styles')
@@ -36,6 +43,10 @@
         border:2px solid black;
     }
 </style>
+<!-- JS -->
+
+<script src="https://cdn. s.net/1.10.8/js/jquery. s.min.js" defer="defer"></script>
+
 </head>
 
 <body>
@@ -51,9 +62,22 @@
   @livewireScripts
   @include('layouts/sections/scripts')
   
-
-
-
+  <script type="text/javascript">
+   $(document).ready(function() {
+    $('.datatable '). ({
+        responsive: true,
+        autoWidth: false,
+        "pagingType": "full_numbers",
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "language": {
+            "url": "//cdn. s.net/plug-ins/1.10.21/i18n/French.json"
+        },
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
+});
+</script>
 
 </body>
 

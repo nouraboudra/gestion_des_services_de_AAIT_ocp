@@ -9,7 +9,13 @@ class SessionFormation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date_debut', 'date_fin'];
+    protected $fillable = [
+        'date_debut',
+        'date_fin',
+        'formation_id',
+        'salle_id',
+        'groupe_id'
+    ];
 
     public function groupe() {
         return $this->belongsTo(Groupe::class);

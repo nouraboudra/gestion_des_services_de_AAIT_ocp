@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="table-responsive text-nowrap">
-        <table class="table">
+        <table class="table  ">
             <thead>
                 <tr>
                     <th>Code</th>

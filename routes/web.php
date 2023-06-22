@@ -5,7 +5,12 @@ use App\Http\Controllers\admin\SalleController;
 use App\Http\Controllers\candidat\CandidatEcosystemeController;
 use App\Http\Controllers\candidat\CandidatOcpController;
 use App\Http\Controllers\planification\PlanificationController;
+use App\Http\Controllers\planification\SessionFormationController;
+use App\Http\Controllers\planification\ThemeController;
+use App\Http\Controllers\planification\DomainController;
 
+
+use App\Http\Controllers\presence\PresenceCandidatController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
@@ -87,7 +92,8 @@ Route::get('/download-example', function () {
     return response()->download($path);
 })->name('download.example');
 
-
+//presence 
+Route::resource('presence/candidat', PresenceCandidatController::class);
 // authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/login', [LoginBasic::class, 'index']);
@@ -174,5 +180,14 @@ Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
 Route::get('planing/formations',FormationPlanification::class)->name('planing.formations.index');
 Route::post('planing/formations',[PlanificationController::class, 'store'])->name('planing.formations.store');
 Route::get('planing/{id}/sessions',SessionPlanification::class)->name('planing.sessions.index');
-Route::post('planing/sessions',[SessionPlanification::class, 'store'])->name('planing.sessions.store');
+Route::post('planing/sessions',[SessionFormationController::class, 'store'])->name('planing.sessions.store');
+Route::delete('planing/sessions/{id}',[SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
+
+Route::get('planing/themes',[ThemeController::class, 'index'])->name('planing.themes.index');
+Route::post('planing/themes',[ThemeController::class, 'store'])->name('planing.themes.store');
+Route::delete('planing/themes/{id}',[ThemeController::class, 'destroy'])->name('planing.themes.destroy');
+
+Route::get('planing/domaines', [DomainController::class, 'index'])->name('planing.domaines.index');
+Route::post('planing/domaines', [DomainController::class, 'store'])->name('planing.domaines.store');
+Route::delete('planing/domaines/{id}', [DomainController::class, 'destroy'])->name('planing.domaines.destroy');
 

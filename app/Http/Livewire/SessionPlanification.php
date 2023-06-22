@@ -18,11 +18,12 @@ class SessionPlanification extends Component
     public $salles;
 
     public $domains;
-
+    public $formation;
     public $groupes;
 
     public function mount($id){
         $this->formationId = $id;
+        $this->formation = Formation::findOrFail($id)->first();
     }
 
     public function render()
@@ -41,7 +42,6 @@ class SessionPlanification extends Component
             'salles'=> $this->salles,
             'domains'=>  $this->domains,
             'groupes'=>  $this->groupes,
-            'formation_id'=> $this->formationId,
         ])->extends('layouts.contentNavbarLayout')->section('content');
     }
     public function showFormations(){
@@ -64,10 +64,10 @@ class SessionPlanification extends Component
     
         foreach ($sessions as $key => $session) {
             $events[] = [
-                'id' => $sessions->id,
-                'title' => $sessions->salle->nom,
-                'start' => $sessions->date_debut,
-                'end' => $sessions->date_fin,
+                'id' => $session->id,
+                'title' => $session->formation->Intitulé."-".$session->salle->code,
+                'start' => $session->date_debut,
+                'end' => $session->date_fin,
                 'color' => $colors[$key % count($colors)],  // Assign a color from the array.
     
             ];
