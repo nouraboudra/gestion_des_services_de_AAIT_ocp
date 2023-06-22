@@ -3,6 +3,9 @@
 @section('title', 'Account settings - Pages')
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-...your-integrity-hash...==" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" integrity="sha512-...your-integrity-hash...==" crossorigin="anonymous"></script>
+
 <h4 class="fw-bold py-3 mb-4">
     <span class="text-muted fw-light">Gestion des candidats /</span> Candidats EcoSysteme
 </h4>
@@ -20,13 +23,19 @@
             <div class="card-body">
                 <div class="d-flex align-items-start align-items-sm-center gap-4">
                     <div class="button-wrapper">
-                        <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">Upload un fichier Excel</span>
-                            <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input type="file" id="upload" class="account-file-input" hidden accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                        </label>
+                        <form action="{{ route('candidatEcosysteme.upload') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <label for="file-upload" class="btn btn-primary me-2 mb-4">
+                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Choisir un fichier Excel</span>
+                            </label>
+                            <input id="file-upload" type="file" name="file" accept=".xlsx, .xls, .csv" required style="display: none;">
+                            <button type="submit" class="btn btn-primary me-2 mb-4">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                
+                            </button>
+                        </form>
                     </div>
-                    
                     <div class="button-wrapper">
                         <a href="{{ route('candidatEcosysteme.create') }}">
                             <button type="button" class="btn btn-primary me-2 mb-4">
@@ -60,7 +69,7 @@
                     <tbody class="table-border-bottom-0">
                         @foreach ($candidats as $candidat)
                         <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $candidat->candidat->user->Matricule }}</strong></td>
+                            <td><strong>{{ $candidat->candidat->user->Matricule }}</strong></td>
                             <td>{{ $candidat->candidat->user->nom }}</td>
                             <td>{{ $candidat->candidat->user->prenom }}</td>
                             <td>{{ $candidat->candidat->user->email }}</td>

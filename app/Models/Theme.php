@@ -24,7 +24,7 @@ class Theme extends Model
     }
     
     public function planFormations() {
-        return $this->belongsToMany(PlanFormation::class);
+        return $this->belongsToMany(Formation::class);
     }
     
 }

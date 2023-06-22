@@ -15,10 +15,10 @@ return new class extends Migration
            
             $table->unsignedInteger('groupe_id');
             $table->unsignedInteger('salle_id');
-            $table->unsignedInteger('plan_formation_id');
+            $table->unsignedInteger('formation_id');
             $table->foreign('groupe_id')->references('id')->on('groupes')->onDelete('cascade');
             $table->foreign('salle_id')->references('id')->on('salles')->onDelete('cascade');
-            $table->foreign('plan_formation_id')->references('id')->on('plan_formations')->onDelete('cascade');
+            $table->foreign('formation_id')->references('id')->on('formations')->onDelete('cascade');
           
         
             $table->timestamps();

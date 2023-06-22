@@ -6,6 +6,7 @@ use App\Http\Controllers\candidat\CandidatEcosystemeController;
 use App\Http\Controllers\candidat\CandidatOcpController;
 use App\Http\Controllers\planification\PlanificationController;
 
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -45,7 +46,8 @@ use App\Http\Controllers\extended_ui\TextDivider;
 use App\Http\Controllers\icons\Boxicons;
 use App\Http\Controllers\form_elements\Useradd;
 use App\Http\Controllers\form_elements\InputGroups;
-
+use App\Http\Livewire\FormationPlanification;
+use App\Http\Livewire\SessionPlanification;
 
 
 
@@ -155,8 +157,10 @@ Route::put('admin/salles/{id}', [SalleController::class, 'update'])->name('admin
 
 //mail
 Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
-
-
+Route::post('candidatEcosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
+//Route::post('/import-users', [CandidatEcosystemeController::class, 'importUsers'])->name('import.users');
+//Route::post('/upload', [CandidatEcosystemeController::class, 'store'])->name('candidatEcosysteme.upload');
+//Route::post('/candidat-ecosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
 // form layouts
 Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
 Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
@@ -167,6 +171,8 @@ Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
 
 
 //planification
-Route::get('planifications', [PlanificationController::class, 'index'])->name('planification.index');
-Route::get('plan/planifications/create', [PlanificationController::class, 'create'])->name('planification.create');
-Route::post('plan/planifications', [PlanificationController::class, 'store'])->name('planification.store');
+Route::get('planing/formations',FormationPlanification::class)->name('planing.formations.index');
+Route::post('planing/formations',[PlanificationController::class, 'store'])->name('planing.formations.store');
+Route::get('planing/{id}/sessions',SessionPlanification::class)->name('planing.sessions.index');
+Route::post('planing/sessions',[SessionPlanification::class, 'store'])->name('planing.sessions.store');
+

@@ -17,8 +17,8 @@ class FicheSatisfaction extends Model
         return $this->belongsTo(Formateur::class);
     }
     
-    public function planFormation() {
-        return $this->belongsTo(PlanFormation::class);
+    public function formation() {
+        return $this->belongsTo(Formation::class);
     }
 
     

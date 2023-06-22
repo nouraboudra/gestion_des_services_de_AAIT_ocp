@@ -76,8 +76,19 @@
     {
       "name": "Planification",
       "icon": "menu-icon tf-icons bx bx-table",
-      "slug": "",
-      "url": "planifications"
+      "slug": "planing",
+      "submenu": [
+        {
+          "url": "planing/formations",
+          "name": "Formations",
+          "slug": "planing.formations.index"
+        },
+        {
+          "url": "planing/sessions",
+          "name": "Sessions",
+          "slug": "planing.sessions.index"
+        }     
+      ]
     },
     {
       "name": "Gestion Salles",

@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\planification;
-use App\Models\PlanFormation;
+use App\Models\Formation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
-use App\Models\Formation;
 use Illuminate\Http\Request;
 use Yoeunes\Toastr\Facades\Toastr;
 
@@ -29,7 +27,7 @@ class PlanificationController extends Controller
             'Intitulé' => 'required|string',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after:date_debut',
-            'theme_id' => 'required|array',
+            'themes' => 'required|array',
 
         ];
 
@@ -64,22 +62,17 @@ $validator->after(function ($validator) use ($request) {
     // Create a new Formation
     $formation = Formation::create([
         'Intitulé' => $request->input('Intitulé'),
-    ]);
-
-    // Create a new PlanFormation and associate it with the Formation
-    $planFormation = PlanFormation::create([
         'date_debut' => $request->input('date_debut'),
         'date_fin' => $request->input('date_fin'),
-        'formation_id' => $formation->id,
-        'planificateur_id' => Auth::id(),
+        'planificateur_id' => '1',
     ]);
 
-     // Sync the selected themes with the PlanFormation
-     $themeIds = $request->input('theme_id');
-     $planFormation->theme()->sync($themeIds);
-     Toastr::success('Formation et PlanFormation créés avec succès.', 'Succès');
+    // Sync the selected themes with the Formation
+    $themeIds = $request->input('themes');
+     $formation->theme()->sync($themeIds);
+     Toastr::success('Formation et Formation créés avec succès.', 'Succès');
 
-     return redirect()->route('planification.show', $formation->id);
+     return redirect()->route('planing.formations.index');
 
     }
 

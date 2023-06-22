@@ -19,8 +19,8 @@ class SessionFormation extends Model
         return $this->belongsTo(Salle::class);
     }
     
-    public function planFormation() {
-        return $this->belongsTo(PlanFormation::class);
+    public function formation() {
+        return $this->belongsTo(Formation::class);
     }
     
     

@@ -11,9 +11,11 @@ return new class extends Migration
         Schema::create('formations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('Intitulé');
+            $table->date('date_debut');
+            $table->date('date_fin');
+            $table->unsignedBigInteger('planificateur_id');
             $table->nullableMorphs('formationable');
-            $table->unsignedInteger('plan_formation_id');
-            $table->foreign('plan_formation_id')->references('id')->on('plan_formations')->onDelete('cascade');
+            $table->foreign('planificateur_id')->references('id')->on('planificateurs')->unsigned()->onDelete('cascade');
             $table->timestamps();
         });
     }

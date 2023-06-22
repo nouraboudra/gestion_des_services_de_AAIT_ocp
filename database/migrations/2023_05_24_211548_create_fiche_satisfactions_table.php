@@ -13,8 +13,8 @@ return new class extends Migration
             // Ajoutez ici les colonnes nécessaires pour la fiche de satisfaction
 
             // Relation avec la table plan_formation
-            $table->unsignedInteger('plan_formation_id');
-            $table->foreign('plan_formation_id')->references('id')->on('plan_formations')->onDelete('cascade');
+            $table->unsignedInteger('formation_id');
+            $table->foreign('formation_id')->references('id')->on('formations')->onDelete('cascade');
 
 
             $table->unsignedBigInteger('formateur_id');

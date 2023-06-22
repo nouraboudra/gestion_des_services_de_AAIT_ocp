@@ -15,6 +15,6 @@ class Planificateur extends Model
     }
     public function planFormations()
     {
-        return $this->hasMany(PlanFormation::class);
+        return $this->hasMany(Formation::class);
     }
 }

@@ -10,15 +10,16 @@ class Formation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['Intitulé', 'formationable_type', 'formationable_id'];
+    protected $fillable = ['Intitulé', 'date_debut', 
+    'date_fin', 'theme_id','planificateur_id', 'formationable_type', 'formationable_id'];
 
     public function formationable()
     {
         return $this->morphTo();
     }
 
-    public function planFormation() {
-        return $this->belongsTo(PlanFormation::class);
+    public function formation() {
+        return $this->belongsTo(Formation::class);
     }
     
     public function tests() {
@@ -32,6 +33,18 @@ class Formation extends Model
     public function candidats(): BelongsToMany
     {
         return $this->belongsToMany(Candidat::class, 'candidat_formation', 'formation_id', 'candidat_id');
+    }
+
+    public function ficheSatisfactions() {
+        return $this->hasMany(FicheSatisfaction::class);
+    }
+    
+    public function planificateur() {
+        return $this->belongsTo(Planificateur::class);
+    }
+    public function theme()
+    {
+        return $this->belongsToMany(Theme::class);
     }
 
 }

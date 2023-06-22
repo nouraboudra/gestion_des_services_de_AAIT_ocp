@@ -20,11 +20,12 @@ class DatabaseSeeder extends Seeder
     {
         //\App\Models\User::factory(30)->create();
 
-        $this->call(PermissionsSeeder::class);
-        $this->call(BatimentsSeeder::class);
-        $this->call(TypesSalleSeeder::class);
-        $this->call(EcosystemSeeder::class);
-        $this->call(CandidatOcpSeeder::class);
+        //$this->call(PermissionsSeeder::class);
+        //$this->call(BatimentsSeeder::class);
+        //$this->call(TypesSalleSeeder::class);
+        //$this->call(EcosystemSeeder::class);
+       // $this->call(CandidatOcpSeeder::class);
+        $this->call(FormationSeeder::class);
         
         
     }

@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\candidat;
 
 use App\Http\Controllers\Controller;
+use App\Imports\CandidatEcosystemeImport;
 use App\Models\Candidat;
 use App\Models\CandidatEcosysteme;
 use App\Models\User;
 use Illuminate\Http\Request;
+
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewUserNotification;
 
+use App\Imports\UserImport;
+
 
 use Illuminate\Support\Facades\Hash;
+
 
 
 class CandidatEcosystemeController extends Controller
@@ -22,14 +28,11 @@ class CandidatEcosystemeController extends Controller
 
     public function index()
     {
-      
-        
         $users = User::with('roles')->get();
         $candidats = CandidatEcosysteme::all();
         return view("content.management.candidat-ecosysteme-index",compact('candidats'));
     }
 
-    
     public function create()
     {
         $roles = Role::where('name', 'candidat_ecosysteme')->get(); // Fetching only 'candidat_ecosysteme' role
@@ -37,7 +40,7 @@ class CandidatEcosystemeController extends Controller
         
     }
 
-   
+     
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -111,18 +114,67 @@ class CandidatEcosystemeController extends Controller
         $matricule = $request->input('matricule');
         $password = $request->input('password');
         $email = $request->input('email');
+        $nom = $request->input('nom');
+        $prenom = $request->input('prenom');
 
         $data = [
             'matricule' => $matricule,
             'password' => $password,
+            'nom' =>$nom,
+            'prenom' =>$prenom,
         ];
 
         Mail::to($email)->send(new NewUserNotification($data));
-    // Redirect or perform any other actions as needed
-    return redirect()-> route('candidatEcosysteme.index');
+
+        // Redirect or perform any other actions as needed
+        return redirect()->route('candidatEcosysteme.index');
+    }
+  
+
+    public function upload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+
+            // Loop over the error messages and display a toast for each error
+            foreach ($errors->all() as $error) {
+                // Show a toast error message
+                toastr()->error($error);
+            }
+
+            return redirect()->back();
+        }
+
+        // Handle Excel import if a file is provided
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $import = new CandidatEcosystemeImport();
+            Excel::import($import, $file);
+
+            // Get the imported users
+            $users = $import->getUsers();
+
+            // Process each user and send email notifications
+            foreach ($users as $user) {
+                $data = [
+                    'matricule' => $user['matricule'],
+                    'password' => $user['password'],
+                    'nom' => $user['nom'],
+                    'prenom' => $user['prenom'],
+                ];
+
+                Mail::to($user['email'])->send(new NewUserNotification($data));
+            }
+        }
+
+        // Redirect or perform any other actions as needed
+        return redirect()->route('candidatEcosysteme.index');
     }
 
-    
     public function show($id)
     {
         //
