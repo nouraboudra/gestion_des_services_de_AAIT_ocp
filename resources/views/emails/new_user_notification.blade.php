@@ -1,7 +1,7 @@
 @component('mail::message')
 # Bienvenue dans notre application
 
-Bonjour {{ $data['nom'] }}{{ $data['prenom'] }},
+Bonjour {{ $data['nom'] }} {{  }}{{ $data['prenom'] }},
 
 Voici votre ID et votre mot de passe :
 
@@ -10,6 +10,6 @@ Voici votre ID et votre mot de passe :
 
 Merci d'avoir rejoint notre application !
 
-Merci,
+
 L'équipe de l'application
 @endcomponent

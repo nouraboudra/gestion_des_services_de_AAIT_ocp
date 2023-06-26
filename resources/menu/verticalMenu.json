@@ -49,29 +49,10 @@
       ]
     },
     {
-      "name": "Gestion présence",
+      "name": "Presence",
       "icon": "menu-icon tf-icons bx bx-detail",
-      "slug": "auth",
-      "submenu": [
-        {
-          "url": "/auth/login-basic",
-          "name": "Login",
-          "slug": "auth-login-basic",
-          "target": "_blank"
-        },
-        {
-          "url": "/auth/register-basic",
-          "name": "Register",
-          "slug": "auth-register-basic",
-          "target": "_blank"
-        },
-        {
-          "url": "/auth/forgot-password-basic",
-          "name": "Forgot Password",
-          "slug": "auth-forgot-password-basic",
-          "target": "_blank"
-        }
-      ]
+      "slug": "presence-presence",
+      "url":  "presence/presence"
     },
     {
       "name": "Planification",

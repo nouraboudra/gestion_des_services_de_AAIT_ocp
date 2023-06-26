@@ -16,7 +16,7 @@
   <!-- Canonical SEO -->
   <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/app/logo.png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/app/logo1.png') }}" />
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn. s.net/v/bs4/dt-1.10.25/ s.min.css"/>
 

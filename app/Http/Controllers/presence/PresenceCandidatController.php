@@ -4,6 +4,8 @@ namespace App\Http\Controllers\presence;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
+use App\Models\Domain;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 
 class PresenceCandidatController extends Controller
@@ -12,7 +14,13 @@ class PresenceCandidatController extends Controller
     public function index()
     {
         $absences = Absence::all();
-        return view('content.presence.presence-candidat-index');
+        $themes = Theme::all();
+        $domains = Domain::all();
+       
+        return view('content.presence.presence-presence-index',compact('domains','themes'));
+
+        
+        
     }
 
     

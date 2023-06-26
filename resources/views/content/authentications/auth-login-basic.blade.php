@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Login Basic - Pages')
+@section('title', 'Login')
 
 @section('page-style')
     <!-- Page -->
@@ -27,7 +27,7 @@
 
                         <!-- /Logo -->
                         <h4 class="mb-2">Bienvenue ! 👋</h4>
-                        <p class="mb-4">Connectez-vous à votre compte et commencez l'aventure</p>
+                        <p class="mb-4">Connectez-vous à votre compte</p>
 
                         <form id="formAuthentication" class="mb-3" action="{{ route('post-auth-login-basic') }}"
                             method="POST">

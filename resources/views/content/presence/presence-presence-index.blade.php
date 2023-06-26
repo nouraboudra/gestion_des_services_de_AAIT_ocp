@@ -19,29 +19,20 @@
                         <div class="col-sm-6 col-md-4">
                             <div class="mb-3">
                                 <label for="Domain" class="form-label">Domain</label>
-                                <select class="form-select" id="Domain" name="Domain">
-                                    <option>HSE</option>
-                                    <option value="Français">Maintenance</option>
-                                    <option value="Arabe">Transverse et
-                                        Fonctions Support</option>
-                                    <option value="Anglais">Exploitation</option>
-                                    <option value="Autre">Autre</option>
+                                <select class="form-select" id="Domain" name="Domain" onchange="updateThemes()">
+                                    <option value="">Select Domain</option>
+                                    @foreach ($domains as $domain)
+                                        <option value="{{ $domain->id }}">{{ $domain->nom }}</option>
+                                    @endforeach
                                 </select>
-                                <input type="text" class="form-control mt-2" id="Domain_autre" name="Domain_autre" placeholder="Entrez autre langue" style="display: none;">
                             </div>
                         </div>
-                        <!-- Second Column -->
+                        
                         <div class="col-sm-6 col-md-4">
                             <div class="mb-3">
                                 <label for="Theme" class="form-label">Thème</label>
                                 <select class="form-select" id="Theme" name="Theme">
-                                    <option>Risques liés aux installations d’ammoniac</option>
-                                    <option value="Français">Défense Contre Incendie (DCI)</option>
-                                    <option value="Arabe">Équipements de Protection Individuelle (EPI) :
-                                        Choix et utilisations</option>
-                                    <option value="Anglais">Le bruit : source de nuisances professionnelles
-                                        et de danger</option>
-                                    <option value="Autre">Autre</option>
+                                    <option value="">Select Theme</option>
                                 </select>
                                 <input type="text" class="form-control mt-2" id="Theme_autre" name="Theme_autre" placeholder="Entrez autre thème" style="display: none;">
                             </div>
@@ -68,7 +59,7 @@
 
     <!-- Add Space Here -->
     <div class="my-4"></div>
-    
+
     <!-- 3 Section -->
     <div class="row">
 
@@ -77,12 +68,10 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="button-wrapper">
-                            <a href="{{ route('candidat.index') }}">
-                                <button type="button" class="btn btn-primary me-2 mb-4">
-                                    <i class="bx bx-reset d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block"> Nouveau Candidat</span>
-                                </button>
-                            </a>
+                            <button type="button" class="btn btn-primary me-2 mb-4" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Nouveau Candidat</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -158,4 +147,53 @@
     
 </div>
 
+
+<div class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+       <!-- Modal Content -->
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau Candidat au groupe</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Form -->
+<form method="POST" action="">
+@csrf
+<div class="modal-body">
+    <!-- Id -->
+    <div class="mb-3">
+        <label for="Id" class="form-label">ID</label>
+        <input type="text" id="Id" class="form-control" name="Id" placeholder="Entrez ID">
+        </div>
+<!-- Nom -->
+<div class="mb-3">
+<label for="nom" class="form-label">Nom</label>
+<input type="text" id="nom" class="form-control" name="nom" placeholder="Entrez Nom">
+</div>
+<!-- prenom -->
+<div class="mb-3">
+    <label for="prenom" class="form-label">Prenom</label>
+    <input type="text" id="prenom" class="form-control" name="prenom" placeholder="Entrez Prenom">
+</div>
+
+<!-- Domaine ID -->
+<div class="mb-3">
+<label for="domain_id" class="form-label">Groupe</label>
+<select class="form-select" id="Groupe_id" name="Groupe_id">
+<option value="dfgfdg">fdgf</option>
+</select>
+</div>
+</div>
+
+<div class="modal-footer">
+<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+<button type="submit" class="btn btn-success">Enregistrer</button>
+</div>
+</form>
+</div>
+
+    </div>
+  </div>
 @endsection
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.1/main.min.js'></script>

@@ -27,7 +27,7 @@ class NewUserNotification extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'New User Notification',
+            subject: 'AAIT-User Informations',
         );
     }
 

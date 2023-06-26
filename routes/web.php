@@ -11,6 +11,8 @@ use App\Http\Controllers\planification\DomainController;
 
 
 use App\Http\Controllers\presence\PresenceCandidatController;
+use App\Http\Controllers\saadtest\SaadtestControllers;
+
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
@@ -67,7 +69,7 @@ use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic;
 
 // Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+Route::get('/', [LoginBasic::class, 'index'])->name('auth-login-basic');
 
 // layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
@@ -93,7 +95,10 @@ Route::get('/download-example', function () {
 })->name('download.example');
 
 //presence 
-Route::resource('presence/candidat', PresenceCandidatController::class);
+Route::resource('presence/presence', PresenceCandidatController::class);
+
+Route::get('/saadtest', [SaadtestControllers::class, 'index']);
+
 // authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/login', [LoginBasic::class, 'index']);
@@ -137,7 +142,7 @@ Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons'
 
 Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
 
-
+Route::get('saadtest/test', [saadtestController::class, 'index'])->name('saadtest-addtest.index');
 //for admin :
 //roles
 Route::get('admin/roles', [RolesController::class, 'index'])->name('admin.roles.index');
