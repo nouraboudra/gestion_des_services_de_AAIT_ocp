@@ -51,7 +51,6 @@ use App\Http\Controllers\user_interface\Typography;
 use App\Http\Controllers\extended_ui\PerfectScrollbar;
 use App\Http\Controllers\extended_ui\TextDivider;
 use App\Http\Controllers\icons\Boxicons;
-use App\Http\Controllers\form_elements\Useradd;
 use App\Http\Controllers\form_elements\InputGroups;
 use App\Http\Livewire\FormationPlanification;
 use App\Http\Livewire\SessionPlanification;
@@ -63,13 +62,18 @@ use App\Http\Controllers\form_elements\Role;
 
 use App\Http\Controllers\Admin\Showuser;
 use App\Http\Controllers\admin\UsersController;
-
+use App\Http\Controllers\authentications\AuthController;
+use App\Http\Controllers\authentications\RegisterController;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic;
+use App\Models\CandidatEcosysteme;
+use Illuminate\Routing\Route as RoutingRoute;
+use Illuminate\Support\Facades\Auth;
 
 // Main Page Route
-Route::get('/', [LoginBasic::class, 'index'])->name('auth-login-basic');
+
+
 
 // layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
@@ -83,29 +87,95 @@ Route::get('/pages/account-settings-connections', [AccountSettingsConnections::c
 Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
 Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
 
-// candidat managemnet : 
+// candidat managemnet :
 //candidatEcosysteme management
 Route::resource('candidat/candidatEcosysteme', CandidatEcosystemeController::class);
 //candidatOcp management
 Route::resource('candidat/candidatOcp', CandidatOcpController::class);
 
 Route::get('/download-example', function () {
-    $path = public_path('doc/example.xlsx');
-    return response()->download($path);
+  $path = public_path('doc/example.xlsx');
+  return response()->download($path);
 })->name('download.example');
 
-//presence 
+//presence
 Route::resource('presence/presence', PresenceCandidatController::class);
 
 Route::get('/saadtest', [SaadtestControllers::class, 'index']);
 
 // authentication
-Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-Route::get('/login', [LoginBasic::class, 'index']);
-Route::post('/auth/login-basic', [LoginBasic::class, 'authenticate'])->name('post-auth-login-basic');
-Route::get('/auth/register-basic/{userId}', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('post-auth-register-basic');
-Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+Route::middleware('auth')->group(function () {
+  Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard');
+  Route::get('/', [Analytics::class, 'index']);
+  //for admin :
+  //roles
+  Route::prefix('admin')->group(function () {
+
+    Route::middleware(['role:admin'])->group(function () {
+      Route::resource('roles', RolesController::class)
+        ->except(['update'])
+        ->names([
+          'index' => 'admin.roles.index',
+          'create' => 'roles.create',
+          'show' => 'roles.show',
+          'store' => 'roles.store',
+          'destroy' => 'roles.delete',
+          'edit' => 'roles.edit',
+        ]);
+      //users
+
+      Route::resource('users', UsersController::class)
+        ->except(['update'])
+        ->names([
+          'index' => 'admin.users.index',
+          'create' => 'users.create',
+          'show' => 'users.show',
+          'destroy' => 'users.delete',
+          'store' => 'users.store',
+        ]);
+    });
+
+
+    //salles
+    Route::middleware(['role:planificateur'])->group(function () {
+
+      Route::resource('salles', SalleController::class)
+        ->except(['show'])
+        ->names([
+          'index' => 'admin.salles.index',
+          'create' => 'salles.create',
+          'store' => 'salles.store',
+          'destroy' => 'admin.salles.destroy',
+          'edit' => 'admin.salles.edit',
+          'update' => 'admin.salles.update',
+        ]);
+    });
+  });
+
+  //mail
+  Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
+  Route::post('candidatEcosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
+  //Route::post('/import-users', [CandidatEcosystemeController::class, 'importUsers'])->name('import.users');
+  //Route::post('/upload', [CandidatEcosystemeController::class, 'store'])->name('candidatEcosysteme.upload');
+  //Route::post('/candidat-ecosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
+
+});
+
+Route::get('login', [LoginBasic::class, 'index'])->name('login');
+Route::get('register', [RegisterController::class, 'index'])->name('register');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::prefix('auth')->group(function () {
+  // Handle the routes that start with 'auth'
+  Route::get('login', [LoginBasic::class, 'index'])->name('login');
+  Route::get('login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
+  Route::post('/auth/login-basic', [LoginBasic::class, 'authenticate'])->name('post-auth-login-basic');
+  Route::get('register-basic/{userId}', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+  Route::post('register-basic', [RegisterBasic::class, 'store'])->name('post-auth-register-basic');
+  Route::get('forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+});
+
+
 
 // cards
 Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
@@ -143,35 +213,6 @@ Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons'
 Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
 
 Route::get('saadtest/test', [saadtestController::class, 'index'])->name('saadtest-addtest.index');
-//for admin :
-//roles
-Route::get('admin/roles', [RolesController::class, 'index'])->name('admin.roles.index');
-Route::get('admin/roles/create', [RolesController::class, 'create'])->name('roles.create');
-Route::get('admin/roles/{id}', [RolesController::class, 'show'])->name('roles.show');
-Route::post('admin/roles', [RolesController::class, 'store'])->name('roles.store');
-Route::delete('admin/roles/{id}', [RolesController::class, 'destroy'])->name('roles.delete');
-Route::get('admin/roles/{id}/edit', [RolesController::class, 'edit'])->name('roles.edit');
-//users
-Route::get('admin/users', [UsersController::class, 'index'])->name('admin.users.index');
-Route::get('admin/users/create', [UsersController::class, 'create'])->name('users.create');
-Route::get('admin/users/{id}', [UsersController::class, 'show'])->name('users.show');
-Route::delete('admin/users/{id}', [UsersController::class, 'destroy'])->name('users.delete');
-Route::post('admin/users', [UsersController::class, 'store'])->name('users.store');
-
-//salles
-Route::get('admin/salles', [SalleController::class, 'index'])->name('admin.salles.index');
-Route::get('admin/salles/create', [SalleController::class, 'create'])->name('salles.create');
-Route::post('admin/salles', [SalleController::class, 'store'])->name('salles.store');
-Route::delete('admin/salles/{id}', [SalleController::class, 'destroy'])->name('admin.salles.destroy');
-Route::get('admin/salles/{id}/edit', [SalleController::class, 'edit'])->name('admin.salles.edit');
-Route::put('admin/salles/{id}', [SalleController::class, 'update'])->name('admin.salles.update');
-
-//mail
-Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
-Route::post('candidatEcosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
-//Route::post('/import-users', [CandidatEcosystemeController::class, 'importUsers'])->name('import.users');
-//Route::post('/upload', [CandidatEcosystemeController::class, 'store'])->name('candidatEcosysteme.upload');
-//Route::post('/candidat-ecosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
 // form layouts
 Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
 Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
@@ -182,17 +223,16 @@ Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
 
 
 //planification
-Route::get('planing/formations',FormationPlanification::class)->name('planing.formations.index');
-Route::post('planing/formations',[PlanificationController::class, 'store'])->name('planing.formations.store');
-Route::get('planing/{id}/sessions',SessionPlanification::class)->name('planing.sessions.index');
-Route::post('planing/sessions',[SessionFormationController::class, 'store'])->name('planing.sessions.store');
-Route::delete('planing/sessions/{id}',[SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
+Route::get('planing/formations', FormationPlanification::class)->name('planing.formations.index');
+Route::post('planing/formations', [PlanificationController::class, 'store'])->name('planing.formations.store');
+Route::get('planing/{id}/sessions', SessionPlanification::class)->name('planing.sessions.index');
+Route::post('planing/sessions', [SessionFormationController::class, 'store'])->name('planing.sessions.store');
+Route::delete('planing/sessions/{id}', [SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
 
-Route::get('planing/themes',[ThemeController::class, 'index'])->name('planing.themes.index');
-Route::post('planing/themes',[ThemeController::class, 'store'])->name('planing.themes.store');
-Route::delete('planing/themes/{id}',[ThemeController::class, 'destroy'])->name('planing.themes.destroy');
+Route::get('planing/themes', [ThemeController::class, 'index'])->name('planing.themes.index');
+Route::post('planing/themes', [ThemeController::class, 'store'])->name('planing.themes.store');
+Route::delete('planing/themes/{id}', [ThemeController::class, 'destroy'])->name('planing.themes.destroy');
 
 Route::get('planing/domaines', [DomainController::class, 'index'])->name('planing.domaines.index');
 Route::post('planing/domaines', [DomainController::class, 'store'])->name('planing.domaines.store');
 Route::delete('planing/domaines/{id}', [DomainController::class, 'destroy'])->name('planing.domaines.destroy');
-

@@ -10,109 +10,130 @@ use Illuminate\Support\Facades\Log;
 
 class FormationPlanification extends Component
 {
-    public $showFormations = true;
-    public $showThemes = false;
-    public $events = '';
-    public $count = 10;
-    public $Intitulé, $date_debut, $date_fin, $theme_id;
+  public $showFormations = true;
+  public $showThemes = false;
+  public $events = '';
+  public $isModalOpen = false;
 
-    public $themes;
-    public function render()
-    {   
+  public $count = 10;
+  public $title, $start, $end, $theme_ids = [], $formations = [];
+  public $showModal = false;
 
-        $formations = Formation::all();
-        $events = $this->getCalendarEvents();
-        $this->events = json_encode($events);
-        $this->themes = Theme::all();
 
-        return view('livewire.formation-planification', [
-            'events' => $events,
-            'formations' =>$formations,
-            'themes'=> $this->themes,
-        ])->extends('layouts.contentNavbarLayout')->section('content');
-    }
+  public function render()
+  {
 
-    public function saveFormation() {
-        // Validate the input
-        $this->validate([
-            'Intitulé' => 'required',
-            'date_debut' => 'required|date',
-            'date_fin' => 'required|date|after_or_equal:date_debut',
-            'theme_id' => 'required|exists:themes,id'
-        ]);
-    
-        // Create a new Formation
-        $formation = new Formation();
-        $formation->Intitulé = $this->Intitulé;
-        $formation->date_debut = $this->date_debut;
-        $formation->date_fin = $this->date_fin;
-        $formation->theme_id = $this->theme_id;
-        $formation->planificateur_id = Auth::id() ? Auth::id():1 ;
-        // Save the Formation
-        $formation->save();
-        // Reset the input fields
-        $this->reset(['Intitulé', 'date_debut', 'date_fin', 'theme_id']);
-    
-         // Manually render the component
-    $this->render();
-    }
+    $this->formations = Formation::all();
+    $this->events = $this->getFormations();
+    $this->themes = Theme::all();
 
-   
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName, [
-            'Intitulé' => 'required|string|max:20',
-            'date_debut' => 'required|date',
-            'date_fin' => [
-                'required',
-                'date',
-                function ($attribute, $value, $fail) {
-                    if ($this->date_debut && $value <= $this->date_debut) {
-                        $fail('The end date must be after the start date.');
-                    }
-                }
-            ],
-        ]);
+    return view('livewire.formation-planification', [
+      'events' => $this->events,
+      'themes' => $this->themes,
+    ])->extends('layouts.contentNavbarLayout')->section('content');
+  }
+  public function showModal()
+  {
+    $this->validate(); // Perform real-time validation
+    $this->showModal = true; // Show the modal
+  }
 
-    }
-
-    public function getFormations()
-    {   
-        $formations = Formation::all();
-
-        return  json_encode($formations);
-    }
-   
-
-    public function getCalendarEvents()
-{   
-     $colors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+  public function getFormations()
+  {
+    $colors = ['#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
 
     $events = [];
-    
-    $formationEvents = Formation::all();
+    $formations = Formation::select('id', 'Intitulé as title', 'date_debut as start', 'date_fin as end')
+      ->get();
+    foreach ($formations as $key => $formation) {
+      $events[] = [
+        'id' => $formation->id,
+        'title' => $formation->title,
+        'start' => $formation->start,
+        'end' => $formation->end,
+        'color' => $colors[$key % count($colors)],  // Assign a color from the array.
 
-    foreach ($formationEvents as $key => $formation) {
-        $events[] = [
-            'id' => $formation->id,
-            'title' => $formation->Intitulé,
-            'start' => $formation->date_debut,
-            'end' => $formation->date_fin,
-            'color' => $colors[$key % count($colors)],  // Assign a color from the array.
+      ];
+    }
+    return  json_encode($events);
+  }
 
-        ];
+
+
+  public function eventDrop($formation, $oldFormation)
+  {
+    $formationData = Formation::find($formation['id']);
+    $formationData->date_debut = $formation['start'];
+    $formationData->date_fin = $formation['end'];
+    $formationData->save();
+  }
+
+  public function saveFormation()
+  {
+    // Create a new Formation
+    try {
+      $formation = new Formation();
+      $formation->Intitulé = $this->title;
+      $formation->date_debut = $this->start;
+      $formation->date_fin = $this->end;
+
+      $formation->planificateur_id = Auth::user()->userable_id;
+      $formation->save();
+      $formation->theme()->sync($this->theme_ids);
+    } catch (\Throwable $th) {
+      dd($th);
     }
 
-    return json_encode($events);
-}
+    // Reset the input fields
+    $this->reset(['title', 'start', 'end', 'theme_ids']);
+    toastr()->success("formation " . $formation->Intitulé . " est ajouté avec succes");
 
-    public function showFormations(){
-        $this->showFormations = true;
-        $this->showThemes = false;
-    }
+    redirect()->back();
 
-    public function showThemes(){
-        $this->showFormations = false;
-        $this->showThemes = true;
-    }
+    $this->emit('refreshCalendar');
+  }
+
+
+
+  public function deleteFormation($id)
+  {
+    $formation = Formation::find($id);
+    toastr()->success("formation " . $formation->Intitulé . " est supprimé avec succes");
+    $formation->delete();
+    redirect()->back();
+    $this->emit('refreshCalendar');
+  }
+
+  public function updated($propertyName)
+  {
+    $this->validateOnly($propertyName, [
+      'title' => 'required|string|max:20',
+      'start' => 'required|date',
+      'end' => [
+        'required',
+        'date',
+        function ($attribute, $value, $fail) {
+          if ($this->end && $value <= $this->start) {
+            $fail('The end date must be after the start date.');
+          }
+        }
+      ],
+
+    ]);
+  }
+
+
+
+
+  public function showFormations()
+  {
+    $this->showFormations = true;
+    $this->showThemes = false;
+  }
+
+  public function showThemes()
+  {
+    $this->showFormations = false;
+    $this->showThemes = true;
+  }
 }
