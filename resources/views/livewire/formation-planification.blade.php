@@ -9,141 +9,149 @@
         <li class="nav-item"><button class="nav-link active"><i class="bx bx-user me-1"></i>
             Formations</button></li>
       </ul>
-      <div class="card card-lg">
-        <h5 class="card-header">Les Formations </h5>
-        <button type="button" style="width: 120px; align:right;" class="float-right btn btn-success btn-lg"
-          data-bs-toggle="modal" data-bs-target="#modalCenter">
-          ajouter
-        </button>
-        <div class="card-body">
-          <div class="tab-content">
-            Formations</button>
-            <!-- Table body -->
-            <div>
-              <table class="table  ">
-                <thead>
-                  <tr>
-                    <th>Intitulé</th>
-                    <th>Date Début</th>
-                    <th>Date Fin</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                  @forelse($formations as $formation)
-                  <tr>
-                    <td><a href="{{ route('planing.sessions.index', $formation->id) }}">{{ $formation->Intitulé }}</a>
-                    </td>
-                    <td>{{ date('d-m-Y', strtotime($formation->date_debut)) }}</td>
-                    <td>{{ date('d-m-Y', strtotime($formation->date_fin)) }}</td>
-                    <td>
-                      <div class="dropdown">
-                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
-                            class="bx bx-dots-vertical-rounded"></i></button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item"><i class="bx bx-edit-alt me-1"></i>
-                            Edit</a>
-                          <button class="dropdown-item delete-link"
-                            wire:click="deleteFormation({{ $formation->id }})"><i class="bx bx-trash me-1"></i>
-                            Supprimer</button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  @empty
-                  <tr>
-                    <td colspan="4"> Pas de Formations </td>
-                  </tr>
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-
-
-          <div x-data>
-            <div id='calendar-container' wire:ignore>
-              <div id='calendar'></div>
-            </div>
-          </div>
-
-
-          <div x-data="{ showModal: false, start: '', end: '' }" wire:ignore>
-            <form wire:submit.prevent="saveFormation">
-
-              <div wire:ignore.self class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <!-- Modal Content -->
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle
-                        formation
-                      </h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <!-- Form -->
-                    <div class="modal-body">
-                      <!-- Intitulé -->
-                      <div class="mb-3">
-                        <label for="Intitulé" class="form-label">Intitulé</label>
-                        <input wire:model="title" type="text" id="title" class="form-control" name="title"
-                          placeholder="Entrez Intitulé">
-                        @error('title')
-                        <span class="error">{{ $message }}</span>
-                        @enderror
-
-                      </div>
-
-                      <!-- Date début -->
-                      <div class="mb-3">
-                        <label for="date_debut" class="form-label">Date Début</label>
-                        <input wire:model="start" type="date" id="start" class="form-control" name="start">
-                        @error('start')
-                        <span class="error">{{ $message }}</span>
-                        @enderror
-
-                      </div>
-
-                      <!-- Date fin -->
-                      <div class="mb-3">
-                        <label for="date_fin" class="form-label">Date Fin</label>
-                        <input wire:model="end" type="date" id="end" class="form-control" name="end">
-                        @error('end')
-                        <span class="error">{{ $message }}</span>
-                        @enderror
-
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="theme_id" class="form-label">Themes</label>
-                        @foreach ($themes as $theme)
-                        <div class="form-check">
-                          <input wire:model="theme_ids" class="form-check-input" type="checkbox"
-                            value="{{ $theme->id }}" id="theme-{{ $theme->id }}" name="themes[]">
-                          <label class="form-check-label" for="theme-{{ $theme->id }}">
-                            {{ $theme->nom }}
-                          </label>
-                        </div>
-                        @endforeach
-                      </div>
-
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-            </form>
-          </div>
-        </div>
+    </div>
+    <div class="card card-lg">
+      <h5 class="card-header">Les Formations </h5>
+      <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+          <li class="nav-item"><button type="button" class="btn btn-success float-end" data-bs-toggle="modal"
+              data-bs-target="#modalCenter"><i class="bx bx-plus "></i>
+              ajouter</button></li>
+        </ul>
       </div>
 
+
+
+      <div class="card-body">
+        <div class="tab-content">
+          Formations</button>
+          <!-- Table body -->
+          <div>
+            <table class="table  ">
+              <thead>
+                <tr>
+                  <th>Intitulé</th>
+                  <th>Date Début</th>
+                  <th>Date Fin</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+                @forelse($formations as $formation)
+                <tr>
+                  <td><a href="{{ route('planing.sessions.index', $formation->id) }}">{{ $formation->Intitulé }}</a>
+                  </td>
+                  <td>{{ date('d-m-Y', strtotime($formation->date_debut)) }}</td>
+                  <td>{{ date('d-m-Y', strtotime($formation->date_fin)) }}</td>
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
+                          class="bx bx-dots-vertical-rounded"></i></button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item"><i class="bx bx-edit-alt me-1"></i>
+                          Modifier</a>
+                        <button class="dropdown-item delete-link" wire:click="deleteFormation({{ $formation->id }})"><i
+                            class="bx bx-trash me-1"></i>
+                          Supprimer</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                @empty
+                <tr>
+                  <td colspan="4"> Pas de Formations </td>
+                </tr>
+                @endforelse
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="separator"></div>
+        <div x-data>
+          <div class="calendar-section" id='calendar-container' wire:ignore>
+            <h2>Calendrier</h2>
+            <div id='calendar'></div>
+          </div>
+        </div>
+
+
+        <div x-data="{ showModal: false, start: '', end: '' }" wire:ignore>
+          <form wire:submit.prevent="saveFormation">
+
+            <div wire:ignore.self class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <!-- Modal Content -->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle
+                      formation
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+
+                  <!-- Form -->
+                  <div class="modal-body">
+                    <!-- Intitulé -->
+                    <div class="mb-3">
+                      <label for="Intitulé" class="form-label">Intitulé</label>
+                      <input wire:model="title" type="text" id="title" class="form-control" name="title"
+                        placeholder="Entrez Intitulé">
+                      @error('title')
+                      <span class="error">{{ $message }}</span>
+                      @enderror
+
+                    </div>
+
+                    <!-- Date début -->
+                    <div class="mb-3">
+                      <label for="date_debut" class="form-label">Date Début</label>
+                      <input wire:model="start" type="date" id="start" class="form-control" name="start">
+                      @error('start')
+                      <span class="error">{{ $message }}</span>
+                      @enderror
+
+                    </div>
+
+                    <!-- Date fin -->
+                    <div class="mb-3">
+                      <label for="date_fin" class="form-label">Date Fin</label>
+                      <input wire:model="end" type="date" id="end" class="form-control" name="end">
+                      @error('end')
+                      <span class="error">{{ $message }}</span>
+                      @enderror
+
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="theme_id" class="form-label">Themes</label>
+                      @foreach ($themes as $theme)
+                      <div class="form-check">
+                        <input wire:model="theme_ids" class="form-check-input" type="checkbox" value="{{ $theme->id }}"
+                          id="theme-{{ $theme->id }}" name="themes[]">
+                        <label class="form-check-label" for="theme-{{ $theme->id }}">
+                          {{ $theme->nom }}
+                        </label>
+                      </div>
+                      @endforeach
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                      <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
     </div>
+
+
   </div>
 </div>
 <script src="
@@ -170,17 +178,17 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
             editable: true,
             selectable: true,
             selectMirror: true,
-            unselectCancel:true,
-            unselectAuto:true,
+            unselectCancel: true,
+            unselectAuto: true,
             droppable: true, // this allows things to be dropped onto the calendar
             select: function(info) {
                 var startDateString = info.startStr; // The start date of the selected range
                 var startDate = startDateString.split('T')[0];
                 var endDate = info.endStr; // The end date of the selected range
                 var endDate = endDate.split('T')[0]; // The end date of the selected range
-                if (endDate<startDate) {
-                  endDate=info.startStr;
-                  startDate=info.endStr;
+                if (endDate < startDate) {
+                    endDate = info.startStr;
+                    startDate = info.endStr;
                 }
                 if (startDate != endDate) {
                     var parts = endDate.split('-'); // Split the date string into parts
@@ -202,10 +210,6 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
                 @this.end = endDate;
                 calendar.unselect();
                 showModal();
-
-
-
-
             },
 
             drop: function(info) {
@@ -234,15 +238,20 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
             modal.show();
 
         }
+
         function hideModal() {
             $('#modalCenter').modal('hide');
 
         }
+        @this.on(`hideModal`, () => {
+            hideModal();
+        });
+
         @this.on(`refreshCalendar`, () => {
-          calendar.removeAllEvents();
-          let updatedEvents = JSON.parse(@this.events);  // Replace this with the actual function to fetch updated events
-          calendar.addEventSource(updatedEvents);
-          hideModal();
+            calendar.removeAllEvents();
+            let updatedEvents = JSON.parse(@this
+                .events); // Replace this with the actual function to fetch updated events
+            calendar.addEventSource(updatedEvents);
         });
     });
 </script>

@@ -10,46 +10,43 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use Notifiable;
-    use HasRoles;
+  use HasApiTokens;
+  use HasFactory;
+  use Notifiable;
+  use HasRoles;
 
-    public function userable()
-    {
-        return $this->morphTo();
-    }
-
-
-    protected $fillable = [
-        'email',
-        'password',
-        'prenom',
-        'nom',
-        'Matricule',
-        'date_naissance',
-        'date_embauche',
-        'status',
-    ];
+  public function userable()
+  {
+    return $this->morphTo();
+  }
 
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  protected $fillable = [
+    'email',
+    'password',
+    'prenom',
+    'nom',
+    'Matricule',
+    'date_naissance',
+    'date_embauche',
+    'status',
+  ];
 
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
 
 
-    protected $appends = [
-        'profile_photo_url',
-    ];
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+  ];
 
-    public function findForPassport($username)
-{
+
+
+  public function findForPassport($username)
+  {
     return $this->where('matricule', $username)->first();
-}
+  }
 }

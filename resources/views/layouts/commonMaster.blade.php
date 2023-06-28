@@ -4,7 +4,13 @@
   data-base-url="{{ url('/') }}" data-framework="laravel" data-template="vertical-menu-laravel-template-free">
 
 <head>
-
+  <style>
+    .separator {
+      height: 1px;
+      background-color: #ccc;
+      margin: 20px 0;
+    }
+  </style>
 
   <meta charset="utf-8" />
   <meta name="viewport"

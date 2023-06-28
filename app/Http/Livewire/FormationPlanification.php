@@ -22,7 +22,6 @@ class FormationPlanification extends Component
 
   public function render()
   {
-
     $this->formations = Formation::all();
     $this->events = $this->getFormations();
     $this->themes = Theme::all();
@@ -89,6 +88,7 @@ class FormationPlanification extends Component
     toastr()->success("formation " . $formation->Intitulé . " est ajouté avec succes");
 
     redirect()->back();
+    $this->emit('hideModal');
 
     $this->emit('refreshCalendar');
   }

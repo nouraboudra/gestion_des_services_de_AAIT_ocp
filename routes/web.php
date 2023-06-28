@@ -152,6 +152,22 @@ Route::middleware('auth')->group(function () {
     });
   });
 
+  //planification
+  Route::get('planing/formations', FormationPlanification::class)->name('planing.formations.index');
+  Route::post('planing/formations', [PlanificationController::class, 'store'])->name('planing.formations.store');
+  Route::get('planing/{id}/sessions', SessionPlanification::class)->name('planing.sessions.index');
+  Route::post('planing/sessions', [SessionFormationController::class, 'store'])->name('planing.sessions.store');
+  Route::delete('planing/sessions/{id}', [SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
+
+  Route::get('planing/themes', [ThemeController::class, 'index'])->name('planing.themes.index');
+  Route::post('planing/themes', [ThemeController::class, 'store'])->name('planing.themes.store');
+  Route::delete('planing/themes/{id}', [ThemeController::class, 'destroy'])->name('planing.themes.destroy');
+
+  Route::get('planing/domaines', [DomainController::class, 'index'])->name('planing.domaines.index');
+  Route::post('planing/domaines', [DomainController::class, 'store'])->name('planing.domaines.store');
+  Route::delete('planing/domaines/{id}', [DomainController::class, 'destroy'])->name('planing.domaines.destroy');
+
+
   //mail
   Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
   Route::post('candidatEcosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');
@@ -220,19 +236,3 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 // tables
 Route::get('/tables/basic', [Basic::class, 'index'])->name('tables-basic');
 Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
-
-
-//planification
-Route::get('planing/formations', FormationPlanification::class)->name('planing.formations.index');
-Route::post('planing/formations', [PlanificationController::class, 'store'])->name('planing.formations.store');
-Route::get('planing/{id}/sessions', SessionPlanification::class)->name('planing.sessions.index');
-Route::post('planing/sessions', [SessionFormationController::class, 'store'])->name('planing.sessions.store');
-Route::delete('planing/sessions/{id}', [SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
-
-Route::get('planing/themes', [ThemeController::class, 'index'])->name('planing.themes.index');
-Route::post('planing/themes', [ThemeController::class, 'store'])->name('planing.themes.store');
-Route::delete('planing/themes/{id}', [ThemeController::class, 'destroy'])->name('planing.themes.destroy');
-
-Route::get('planing/domaines', [DomainController::class, 'index'])->name('planing.domaines.index');
-Route::post('planing/domaines', [DomainController::class, 'store'])->name('planing.domaines.store');
-Route::delete('planing/domaines/{id}', [DomainController::class, 'destroy'])->name('planing.domaines.destroy');

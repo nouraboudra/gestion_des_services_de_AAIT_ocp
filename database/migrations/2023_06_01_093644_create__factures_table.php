@@ -6,28 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateFacturesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('_factures', function (Blueprint $table) {
-            $table->id();
-            $table->date('dateFacturation');
-            $table->float('montant');
-            $table->timestamps();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::create('factures', function (Blueprint $table) {
+      $table->id();
+      $table->date('dateFacturation');
+      $table->float('montant');
+      $table->timestamps();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('_factures');
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('_factures');
+  }
 }
