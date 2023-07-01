@@ -7,28 +7,37 @@ use Livewire\Component;
 use App\Models\Formation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Livewire\WithPagination;
 
 class FormationPlanification extends Component
 {
+  use WithPagination;
+  public $pageSize = 5;
+
+  public $search = '';
+
   public $showFormations = true;
   public $showThemes = false;
   public $events = '';
   public $isModalOpen = false;
 
   public $count = 10;
-  public $title, $start, $end, $theme_ids = [], $formations = [];
+  public $title, $start, $end, $theme_ids = [];
   public $showModal = false;
-
+  public $themes = [];
 
   public function render()
   {
-    $this->formations = Formation::all();
+    $formations = Formation::where(function ($query) {
+      $query->where('Intitulé', 'like', '%' . $this->search . '%')
+        ->orWhere('date_debut', 'like', '%' . $this->search . '%')
+        ->orWhere('date_fin', 'like', '%' . $this->search . '%');
+    })->paginate($this->pageSize);
     $this->events = $this->getFormations();
     $this->themes = Theme::all();
 
     return view('livewire.formation-planification', [
-      'events' => $this->events,
-      'themes' => $this->themes,
+      'formations' => $formations
     ])->extends('layouts.contentNavbarLayout')->section('content');
   }
   public function showModal()
@@ -36,14 +45,16 @@ class FormationPlanification extends Component
     $this->validate(); // Perform real-time validation
     $this->showModal = true; // Show the modal
   }
-
+  public function updatingSearch(): void
+  {
+    $this->resetPage();
+  }
   public function getFormations()
   {
     $colors = ['#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
 
     $events = [];
-    $formations = Formation::select('id', 'Intitulé as title', 'date_debut as start', 'date_fin as end')
-      ->get();
+    $formations = Formation::select('id', 'Intitulé as title', 'date_debut as start', 'date_fin as end')->paginate($this->pageSize);
     foreach ($formations as $key => $formation) {
       $events[] = [
         'id' => $formation->id,
@@ -88,10 +99,12 @@ class FormationPlanification extends Component
     toastr()->success("formation " . $formation->Intitulé . " est ajouté avec succes");
 
     redirect()->back();
-    $this->emit('hideModal');
 
     $this->emit('refreshCalendar');
+    $this->emit('hideModal');
   }
+
+
 
 
 
@@ -103,6 +116,7 @@ class FormationPlanification extends Component
     redirect()->back();
     $this->emit('refreshCalendar');
   }
+
 
   public function updated($propertyName)
   {

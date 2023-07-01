@@ -1,12 +1,4 @@
-@extends('layouts/contentNavbarLayout')
-
-@section('title', 'Gestion des Utilisateurs')
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
-@endsection
-
-@section('content')
+<div>
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion des Utilisateurs /</span> Utilisateurs</h4>
 
     <div class="card">
@@ -14,9 +6,10 @@
         <div class="card-body">
             <div class="d-flex align-items-start align-items-sm-center justify-content-between mb-3">
                 <div class="input-group input-group-merge">
-                    <input type="text" class="form-control" value="{{ $search }}" id="searchInput"
+                    <input type="text" class="form-control" wire:model="search" id="searchInput"
                         placeholder="Chercher..." />
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                    <button type="button" class="btn btn-primary"
+                        onclick="window.location='{{ route('users.create') }}'">
                         <i class="bx bx-plus"></i> Ajouter
                     </button>
                 </div>
@@ -63,7 +56,8 @@
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                            data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                            data-bs-toggle="dropdown"><i
+                                                class="bx bx-dots-vertical-rounded"></i></button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item  delete-link" href="javascript:void(0);"><i
                                                     class="bx bx-edit-alt me-1"></i> Edit</a>
@@ -87,24 +81,4 @@
             </div>
 
         </div>
-        <!-- end -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Get all delete link elements
-                const deleteLinks = document.querySelectorAll('.delete-link');
-
-                // Add click event listener to each delete link
-                deleteLinks.forEach(function(deleteLink) {
-                    deleteLink.addEventListener('click', function(e) {
-                        e.preventDefault(); // Prevent default link behavior
-
-                        // Get the associated form ID
-                        const formId = deleteLink.closest('form').id;
-
-                        // Trigger form submission
-                        document.getElementById(formId).submit();
-                    });
-                });
-            });
-        </script>
-    @endsection
+    </div>

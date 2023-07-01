@@ -20,6 +20,7 @@ class FormateurSeeder extends Seeder
     User::factory()->count(5)->create()->each(function ($user) {
       $formateur = new Formateur();
       $formateur->save();
+      $user->assignRole('formateur');
       $formateur->user()->save($user);
     });
   }

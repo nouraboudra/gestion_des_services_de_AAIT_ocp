@@ -12,14 +12,26 @@ use App\Models\SessionFormation;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class SessionPlanification extends Component
 {
+  use WithPagination;
+  public $pageSize = 5;
+  public $search = '';
+
+
   public $showFormations = true;
   public $showThemes = false;
+  protected $rules = [
+    'formateurUserData' => 'nullable',
+  ];
+
+  public $formateurUserData = null;
+
   public $modification = false;
   public $formation_id;
-  public $salles  = [], $domains,  $formation, $groupes = [], $sessions, $formateurs  = [];
+  public $salles  = [], $domains,  $formation, $groupes = [], $formateurs  = [];
   public $salle_id, $domain_id, $groupe_id, $start, $formateur_id;
 
   public $events = '';
@@ -31,12 +43,34 @@ class SessionPlanification extends Component
 
   public function render()
   {
-    $this->formation = Formation::findOrFail($this->formation_id)->first();
-    $this->sessions = SessionFormation::where('formation_id',  $this->formation_id)->get();
+    $this->formation = Formation::findOrFail($this->formation_id);
+
+    $sessions = SessionFormation::where('formation_id', $this->formation_id)
+      ->where(function ($query) {
+        $query->where('date_debut', 'like', '%' . $this->search . '%')
+          ->orWhere('date_fin', 'like', '%' . $this->search . '%')
+          ->orWhereHas('groupe', function ($groupeQuery) {
+            $groupeQuery->where('nom', 'like', '%' . $this->search . '%');
+          })
+          ->orWhereHas('formateur', function ($formateurQuery) {
+            $formateurQuery->whereHas('user', function ($userQuery) {
+              $userQuery->where(function ($nameQuery) {
+                $nameQuery->where('nom', 'like', '%' . $this->search . '%')
+                  ->orWhere('prenom', 'like', '%' . $this->search . '%');
+              });
+            });
+          });
+      })
+      ->paginate($this->pageSize);
+
     $this->events = $this->getSessions();
     $this->domains = Domain::all();
 
-    return view('livewire.session-planification')->extends('layouts.contentNavbarLayout')->section('content');
+    return view('livewire.session-planification', ['sessions' => $sessions])->extends('layouts.contentNavbarLayout')->section('content');
+  }
+  public function updatingSearch(): void
+  {
+    $this->resetPage();
   }
   public function showFormations()
   {
@@ -49,6 +83,14 @@ class SessionPlanification extends Component
     $this->showFormations = false;
     $this->showThemes = true;
   }
+  public function getFormateurUserData($formateurId)
+  {
+    // Retrieve formateur user data based on the $formateurId
+    $formateur = Formateur::find($formateurId);
+
+    // Set the formateur user data
+    $this->formateurUserData = $formateur->user;
+  }
 
   public function getSessions()
   {
@@ -56,7 +98,7 @@ class SessionPlanification extends Component
 
     $events = [];
 
-    $sessions = SessionFormation::where('formation_id',  $this->formation_id)->get();
+    $sessions = SessionFormation::where('formation_id',  $this->formation_id)->paginate($this->pageSize);;
 
     foreach ($sessions as $key => $session) {
       $events[] = [
@@ -80,7 +122,12 @@ class SessionPlanification extends Component
     $sessionData->save();
     redirect()->back();
   }
-
+  public function updated($propertyName)
+  {
+    if ($propertyName !== 'formateurUserData') {
+      $this->validateOnly($propertyName);
+    }
+  }
   public function updatedStart()
   {
     $date = $this->start;
@@ -108,9 +155,12 @@ class SessionPlanification extends Component
     $this->salle_id = '';
     $this->formateur_id = '';
 
-
     // Emit the event with the necessary data
     $this->emit('dateUpdated', ['salles' => $this->salles, 'groupes' => $this->groupes, 'formateurs' => $this->formateurs]);
+    try {
+    } catch (\Throwable $th) {
+      dd($th);
+    }
   }
 
 
@@ -140,13 +190,13 @@ class SessionPlanification extends Component
     }
 
     // Reset the input fields
-    $this->reset(['salles', 'domains', 'formation', 'groupes', 'sessions', 'formateurs']);
+    $this->reset(['salles', 'domains', 'formation', 'groupes', 'formateurs']);
     $this->reset(['salle_id', 'domain_id', 'groupe_id', 'start', 'formateur_id']);
     toastr()->success("formation " . $session->formation->Intitulé . " est ajouté avec succes");
 
     redirect()->back();
-    $this->emit('hideModal');
     $this->emit('refreshCalendar');
+    $this->emit('hideModal');
   }
 
   public function deleteSession($id)

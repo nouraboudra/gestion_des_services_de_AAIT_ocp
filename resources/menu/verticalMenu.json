@@ -6,13 +6,12 @@
       "icon": "menu-icon tf-icons bx bx-home-circle ",
       "slug": "dashboard-analytics"
     },
-    
     {
-      "menuHeader":"Permissions"
+      "menuHeader": "Permissions"
     },
     {
       "name": "Gestion d'utilisateur",
-      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "icon": "menu-icon tf-icons bx bx bx-user",
       "slug": "admin",
       "submenu": [
         {
@@ -27,13 +26,12 @@
         }
       ]
     },
-    
     {
       "menuHeader": "Pages"
     },
     {
       "name": "Gestion Candidats",
-      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "icon": "menu-icon tf-icons bx bx-user-circle",
       "slug": "candidat",
       "submenu": [
         {
@@ -50,37 +48,57 @@
     },
     {
       "name": "Presence",
-      "icon": "menu-icon tf-icons bx bx-detail",
+      "icon": "menu-icon tf-icons bx bx-calendar-check",
       "slug": "presence-presence",
-      "url":  "presence/presence"
+      "url": "presence/presence"
     },
     {
       "name": "Planification",
-      "icon": "menu-icon tf-icons bx bx-table",
+      "icon": "menu-icon tf-icons bx bx-calendar",
       "slug": "planing",
       "submenu": [
         {
           "url": "planing/formations",
           "name": "Formations",
           "slug": "planing.formations.index"
-        },
-
-        {
-          "url": "planing/themes",
-          "name": "Thémes",
-          "slug": "planing.themes.index"
-        },
-        
-        {
-          "url": "planing/domaines",
-          "name": "Domaines",
-          "slug": "planing.domaines.index"
-        } 
+        }
       ]
     },
     {
-      "name": "Gestion Salles",
-      "icon": "menu-icon tf-icons bx bx bx-box",
+      "name": "Gestion d'école",
+      "icon": "menu-icon tf-icons bx bx-book-alt",
+      "slug": "school",
+      "submenu": [
+        {
+          "url": "school/formateurs",
+          "name": "Formateurs",
+          "slug": "school.formateurs.index"
+        },
+        {
+          "url": "school/salles",
+          "name": "Les salles",
+          "slug": "school.salles.index"
+        },
+        {
+          "url": "school/themes",
+          "name": "Thémes",
+          "slug": "school.themes.index"
+        },
+        {
+          "url": "school/domaines",
+          "name": "Domaines",
+          "slug": "school.domaines.index"
+        },
+        {
+          "url": "school/groupes",
+          "name": "Groupes",
+          "slug": "school.groupes.index"
+        }
+      ]
+    },
+    {
+      "name": "Gestion",
+      "icon": "menu-icon tf-icons bx bx-box",
       "slug": "ui",
       "submenu": [
         {
@@ -249,7 +267,6 @@
     {
       "menuHeader": "Misc"
     },
-    
     {
       "url": "https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/laravel-introduction.html",
       "icon": "menu-icon tf-icons bx bx-file",
@@ -258,5 +275,4 @@
       "target": "_blank"
     }
   ]
-  
 }

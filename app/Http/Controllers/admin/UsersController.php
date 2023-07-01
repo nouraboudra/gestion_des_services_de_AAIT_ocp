@@ -14,12 +14,19 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $users = User::with('roles')->get();
-      return view('content.Admin.Admin-showuser')->with('users', $users);
-      
+        $search = $request->query('search');
+        $pageSize = $request->query('page_size', 10);
+
+        $users = User::where(function ($query) use ($search) {
+            $query->where('Matricule', 'like', '%' . $search . '%')
+                ->orWhere('nom', 'like', '%' . $search . '%')
+                ->orWhere('prenom', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
+        })->paginate($pageSize);
+        return view('content.Admin.Admin-showuser')->with('users', $users);
     }
     public function create()
     {
@@ -29,7 +36,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-          // Validate the form data
+        // Validate the form data
         $validator = Validator::make($request->all(), [
             'matricule' => 'required|unique:users',
             'email' => 'required|email|unique:users',
@@ -66,46 +73,45 @@ class UsersController extends Controller
             return redirect()->back();
         }
 
-         // Create a new User instance
-         $user = new User();
-         $user->matricule = $request->input('matricule');
-         $user->email = $request->input('email');
-         $user->prenom = $request->input('prenom');
-         $user->nom = $request->input('nom');
-         $user->password = Hash::make($request->input('password'));
-         $user->date_naissance = $request->input('date_naissance');
-         $user->date_embauche = $request->input('date_embauche');
+        // Create a new User instance
+        $user = new User();
+        $user->matricule = $request->input('matricule');
+        $user->email = $request->input('email');
+        $user->prenom = $request->input('prenom');
+        $user->nom = $request->input('nom');
+        $user->password = Hash::make($request->input('password'));
+        $user->date_naissance = $request->input('date_naissance');
+        $user->date_embauche = $request->input('date_embauche');
 
-         // Save the user
+        // Save the user
         $user->save();
-       // Handle roles assignment
-       if ($request->has('roles')) {
-        $roles = $request->input('roles');
-        $user->roles()->sync($roles);
-        $roles = Role::whereIn('id', $roles)->get();
-        foreach ($roles as $role) {
-            switch ($role->name) {
-                case 'candidat_ecosysteme':
-                   
-                    $candidat = new Candidat();
-                    $candidat_ecoSystem = new CandidatEcosysteme();
-                    $candidat_ecoSystem->CIN = $user->matricule;
-                    $candidat_ecoSystem->save();
-                    $candidat_ecoSystem->candidat()->save($candidat);
-                    $candidat->user()->save($user);
-    
-                    break;
-                
-                default:
-                    # code...
-                    break;
+        // Handle roles assignment
+        if ($request->has('roles')) {
+            $roles = $request->input('roles');
+            $user->roles()->sync($roles);
+            $roles = Role::whereIn('id', $roles)->get();
+            foreach ($roles as $role) {
+                switch ($role->name) {
+                    case 'candidat_ecosysteme':
+
+                        $candidat = new Candidat();
+                        $candidat_ecoSystem = new CandidatEcosysteme();
+                        $candidat_ecoSystem->CIN = $user->matricule;
+                        $candidat_ecoSystem->save();
+                        $candidat_ecoSystem->candidat()->save($candidat);
+                        $candidat->user()->save($user);
+
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
             }
         }
-       
-        }
         toastr()->success("utilisateur créer avec succes");
-    // Redirect or perform any other actions as needed
-    return redirect()->route("admin.users.index");
+        // Redirect or perform any other actions as needed
+        return redirect()->route("admin.users.index");
     }
 
     public function show(User $user)
@@ -127,9 +133,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($userId);
         $user->delete();
-        toastr()->success("l'utilisateur' ".$user->name." est supprimé avec succes");
+        toastr()->success("l'utilisateur' " . $user->name . " est supprimé avec succes");
         return redirect()->back();
     }
-
-
 }

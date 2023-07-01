@@ -1,12 +1,4 @@
-@extends('layouts/contentNavbarLayout')
-
-@section('title', 'Gestion des Salles')
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
-@endsection
-
-@section('content')
+<div>
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Gestion des salles /</span> salles
     </h4>
@@ -71,4 +63,4 @@
             </table>
         </div>
     </div>
-@endsection
+</div>

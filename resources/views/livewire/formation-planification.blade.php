@@ -1,164 +1,170 @@
 <div>
-  <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">Planification /</span> Formations
-  </h4>
-
-  <div class="row">
-    <div class="col-md-12">
-      <ul class="nav nav-pills flex-column flex-md-row mb-3">
-        <li class="nav-item"><button class="nav-link active"><i class="bx bx-user me-1"></i>
-            Formations</button></li>
-      </ul>
-    </div>
-    <div class="card card-lg">
-      <h5 class="card-header">Les Formations </h5>
-      <div class="col-md-12">
-        <ul class="nav nav-pills flex-column flex-md-row mb-3">
-          <li class="nav-item"><button type="button" class="btn btn-success float-end" data-bs-toggle="modal"
-              data-bs-target="#modalCenter"><i class="bx bx-plus "></i>
-              ajouter</button></li>
-        </ul>
-      </div>
-
-
-
-      <div class="card-body">
-        <div class="tab-content">
-          Formations</button>
-          <!-- Table body -->
-          <div>
-            <table class="table  ">
-              <thead>
-                <tr>
-                  <th>Intitulé</th>
-                  <th>Date Début</th>
-                  <th>Date Fin</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                @forelse($formations as $formation)
-                <tr>
-                  <td><a href="{{ route('planing.sessions.index', $formation->id) }}">{{ $formation->Intitulé }}</a>
-                  </td>
-                  <td>{{ date('d-m-Y', strtotime($formation->date_debut)) }}</td>
-                  <td>{{ date('d-m-Y', strtotime($formation->date_fin)) }}</td>
-                  <td>
-                    <div class="dropdown">
-                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
-                          class="bx bx-dots-vertical-rounded"></i></button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item"><i class="bx bx-edit-alt me-1"></i>
-                          Modifier</a>
-                        <button class="dropdown-item delete-link" wire:click="deleteFormation({{ $formation->id }})"><i
-                            class="bx bx-trash me-1"></i>
-                          Supprimer</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                @empty
-                <tr>
-                  <td colspan="4"> Pas de Formations </td>
-                </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Planification /</span> Formations
+    </h4>
+    <div class="card">
+        <h5 class="card-header">Formations</h5>
+        <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center justify-content-between mb-3">
+                <div class="input-group input-group-merge">
+                    <input type="text" class="form-control" placeholder="Search..." wire:model="search" />
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                        <i class="bx bx-plus"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="form-group">
+                    <label for="page-size" class="form-label">Taille de la page:</label>
+                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                        <option value="10">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Date Début</th>
+                            <th>Date Fin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @forelse($formations as $formation)
+                            <tr>
+                                <td><a
+                                        href="{{ route('planing.sessions.index', $formation->id) }}">{{ $formation->Intitulé }}</a>
+                                </td>
+                                <td>{{ date('d-m-Y', strtotime($formation->date_debut)) }}</td>
+                                <td>{{ date('d-m-Y', strtotime($formation->date_fin)) }}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown"><i
+                                                class="bx bx-dots-vertical-rounded"></i></button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"><i class="bx bx-edit-alt me-1"></i>
+                                                Modifier</a>
+                                            <button class="dropdown-item delete-link"
+                                                wire:click="deleteFormation({{ $formation->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Supprimer</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4"> Pas de Formations </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            {{ $formations->withQueryString()->links('pagination.custom-pagination-links-view') }}
 
         </div>
 
         <div class="separator"></div>
-        <div x-data>
-          <div class="calendar-section" id='calendar-container' wire:ignore>
-            <h2>Calendrier</h2>
-            <div id='calendar'></div>
-          </div>
+        <div>
+            <div class="container calendar-section" id='calendar-container' wire:ignore>
+                <h2>Calendrier</h2>
+                <div id='calendar'></div>
+            </div>
         </div>
 
 
         <div x-data="{ showModal: false, start: '', end: '' }" wire:ignore>
-          <form wire:submit.prevent="saveFormation">
+            <form wire:submit.prevent="saveFormation">
 
-            <div wire:ignore.self class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <!-- Modal Content -->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle
-                      formation
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
+                <div wire:ignore.self class="modal fade" id="modalCenter" tabindex="-1"
+                    aria-labelledby="modalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <!-- Modal Content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle
+                                    formation
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
 
-                  <!-- Form -->
-                  <div class="modal-body">
-                    <!-- Intitulé -->
-                    <div class="mb-3">
-                      <label for="Intitulé" class="form-label">Intitulé</label>
-                      <input wire:model="title" type="text" id="title" class="form-control" name="title"
-                        placeholder="Entrez Intitulé">
-                      @error('title')
-                      <span class="error">{{ $message }}</span>
-                      @enderror
+                            <!-- Form -->
+                            <div class="modal-body">
+                                <!-- Intitulé -->
+                                <div class="mb-3">
+                                    <label for="Intitulé" class="form-label">Intitulé</label>
+                                    <input wire:model="title" type="text" id="title" class="form-control"
+                                        name="title" placeholder="Entrez Intitulé">
+                                    @error('title')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
 
+                                </div>
+
+                                <!-- Date début -->
+                                <div class="mb-3">
+                                    <label for="date_debut" class="form-label">Date Début</label>
+                                    <input wire:model="start" type="date" id="start" class="form-control"
+                                        name="start">
+                                    @error('start')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
+
+                                </div>
+
+                                <!-- Date fin -->
+                                <div class="mb-3">
+                                    <label for="date_fin" class="form-label">Date Fin</label>
+                                    <input wire:model="end" type="date" id="end" class="form-control"
+                                        name="end">
+                                    @error('end')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="theme_id" class="form-label">Themes</label>
+                                    @foreach ($themes as $theme)
+                                        <div class="form-check">
+                                            <input wire:model="theme_ids" class="form-check-input" type="checkbox"
+                                                value="{{ $theme->id }}" id="theme-{{ $theme->id }}"
+                                                name="themes[]">
+                                            <label class="form-check-label" for="theme-{{ $theme->id }}">
+                                                {{ $theme->nom }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-
-                    <!-- Date début -->
-                    <div class="mb-3">
-                      <label for="date_debut" class="form-label">Date Début</label>
-                      <input wire:model="start" type="date" id="start" class="form-control" name="start">
-                      @error('start')
-                      <span class="error">{{ $message }}</span>
-                      @enderror
-
-                    </div>
-
-                    <!-- Date fin -->
-                    <div class="mb-3">
-                      <label for="date_fin" class="form-label">Date Fin</label>
-                      <input wire:model="end" type="date" id="end" class="form-control" name="end">
-                      @error('end')
-                      <span class="error">{{ $message }}</span>
-                      @enderror
-
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="theme_id" class="form-label">Themes</label>
-                      @foreach ($themes as $theme)
-                      <div class="form-check">
-                        <input wire:model="theme_ids" class="form-check-input" type="checkbox" value="{{ $theme->id }}"
-                          id="theme-{{ $theme->id }}" name="themes[]">
-                        <label class="form-check-label" for="theme-{{ $theme->id }}">
-                          {{ $theme->nom }}
-                        </label>
-                      </div>
-                      @endforeach
-                    </div>
-
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-                      <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                  </div>
-
                 </div>
-              </div>
-          </form>
+
+            </form>
         </div>
-      </div>
     </div>
-
-
-  </div>
 </div>
-<script src="
-https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
-"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script>
-  document.addEventListener('livewire:load', function() {
+    document.addEventListener('livewire:load', function() {
         var Calendar = FullCalendar.Calendar;
         var Draggable = FullCalendar.Draggable;
         var calendarEl = document.getElementById('calendar');
@@ -240,9 +246,11 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
         }
 
         function hideModal() {
-            $('#modalCenter').modal('hide');
-
+            $("#modalCenter [data-bs-dismiss=modal]").trigger({
+                type: "click"
+            });
         }
+
         @this.on(`hideModal`, () => {
             hideModal();
         });

@@ -13,7 +13,7 @@ class CreateCandidatGroupeTable extends Migration
    */
   public function up()
   {
-    Schema::create('scandidat_groupe', function (Blueprint $table) {
+    Schema::create('candidat_groupe', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('candidat_id');
       $table->unsignedInteger('groupe_id');

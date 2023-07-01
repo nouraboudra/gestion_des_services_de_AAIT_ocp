@@ -11,11 +11,13 @@ class Groupe extends Model
 
     protected $fillable = ['nom', 'capacite'];
 
-    public function candidats() {
+    public function candidats()
+    {
         return $this->belongsToMany(Candidat::class);
     }
-    
-    public function sessionFormations() {
+
+    public function sessionFormations()
+    {
         return $this->hasMany(SessionFormation::class);
     }
 }

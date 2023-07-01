@@ -1,170 +1,197 @@
 <div>
-  <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">Planification /</span> Sessions
-  </h4>
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Planification / <a style="color: inherit;"
+                href="{{ route('planing.formations.index') }}">Formations /
+            </a>
+        </span> Sessions
+    </h4>
+    <div class="card">
+        <h5 class="card-header">Sessions</h5>
+        <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center justify-content-between mb-3">
+                <div class="input-group input-group-merge">
+                    <input type="text" class="form-control" placeholder="Search..." wire:model="search" />
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                        <i class="bx bx-plus"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="form-group">
+                    <label for="page-size" class="form-label">Taille de la page:</label>
+                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                        <option value="10">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Groupe</th>
+                            <th>Salle</th>
+                            <th>Formateur</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @forelse($sessions as $session)
+                            <tr>
+                                <td>{{ $session->id }}</td>
+                                <td>{{ date('d-m-Y', strtotime($session->date_debut)) }}</td>
+                                <td>
+                                    <div class="user-info"
+                                        data-tippy-content=" ID : {{ $session->groupe->id }}<br/> capacity : {{ $session->groupe->capacite }}">
+                                        {{ $session->groupe->nom }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-info"
+                                        data-tippy-content=" ID : {{ $session->salle->id }}<br/>Batiment : {{ $session->salle->batiment->nom }} <br/>Type:{{ $session->salle->typessalle }}">
+                                        {{ $session->salle->code }}
+                                    </div>
+                                </td>
 
-  <div class="row">
-    <div class="col-md-12">
-      <ul class="nav nav-pills flex-column flex-md-row mb-3">
-        <li class="nav-item"><a href="{{ route('planing.formations.index') }}" class="nav-link "><i
-              class="bx bx-user me-1"></i> Formations</a></li>
-      </ul>
-    </div>
+                                <td>
+                                    <div class="user-info"
+                                        data-tippy-content=" ID : {{ $session->formateur->user->id }}<br/>email : {{ $session->formateur->user->email }}">
+                                        {{ $session->formateur->user->nom . ' ' . $session->formateur->user->prenom }}
+                                    </div>
+                                </td>
 
-    <div class="card card-lg">
-      <h5 class="card-header">Planing du {{ $formation->Intitulé }}</h5>
-
-      <div class="col-md-12">
-        <ul class="nav nav-pills flex-column flex-md-row mb-3">
-          <li class="nav-item"><button type="button" class="btn btn-success float-end" data-bs-toggle="modal"
-              data-bs-target="#modalCenter"><i class="bx bx-plus "></i>
-              ajouter</button></li>
-        </ul>
-      </div>
-
-      <div class="card-body">
-        <div class="tab-content">
-
-          <!-- Table body -->
-          <div>
-            <table class="table  ">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Date</th>
-                  <th>Groupe</th>
-                  <th>Salle</th>
-                  <th>Formation</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                @forelse($sessions as $session)
-                <tr>
-                  <td>{{ $session->id }}</td>
-                  <td>{{ date('d-m-Y', strtotime($session->date_debut)) }}</td>
-                  <td>{{ $session->groupe->nom }}</td>
-                  <td>{{ $session->salle->code }}</td>
-                  <td>{{ $session->formation->Intitulé }}</td>
-                  <td>
-                    <div class="dropdown">
-                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
-                          class="bx bx-dots-vertical-rounded"></i></button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" wire:click="editSession({{ $session->id }})" href="#"
-                          data-bs-toggle="modal" data-bs-target="#modalCenter">
-                          <i class="bx bx-edit-alt me-1"></i> Modifier
-                        </a> <button class="dropdown-item delete-link" wire:click="deleteSession({{ $session->id }})"><i
-                            class="bx bx-trash me-1"></i>
-                          Supprimer</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                @empty
-                <tr>
-                  <td colspan="7"> Pas de sessions </td>
-                </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown"><i
+                                                class="bx bx-dots-vertical-rounded"></i></button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="editSession({{ $session->id }})"
+                                                href="#" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                                                <i class="bx bx-edit-alt me-1"></i> Modifier
+                                            </a> <button class="dropdown-item delete-link"
+                                                wire:click="deleteSession({{ $session->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Supprimer</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7"> Pas de sessions </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            {{ $sessions->withQueryString()->links('pagination.custom-pagination-links-view') }}
 
         </div>
 
         <div class="separator"></div>
 
         <div x-data>
-          <div class="calendar-section" id='calendar-container' wire:ignore>
-            <h2>Calendrier</h2>
-            <div id='calendar'></div>
-          </div>
+            <div class="container calendar-section" id='calendar-container' wire:ignore>
+                <h2>Calendrier</h2>
+                <div id='calendar'></div>
+            </div>
         </div>
 
-        <form wire:submit.prevent="modification ? updateSession($session->id) : saveSession" wire:ignore>
+        <form wire:submit.prevent="saveSession" wire:ignore>
 
-          <div wire:ignore class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <!-- Modal Content -->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle session
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+            <div wire:ignore class="modal fade" id="modalCenter" tabindex="-1" aria-labelledby="modalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <!-- Modal Content -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter une nouvelle
+                                session
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
 
-                <!-- Form -->
+                        <!-- Form -->
 
-                <div class="modal-body">
-                  <!-- Date début -->
-                  <div class="mb-3">
-                    <label for="date_debut" class="form-label">Date</label>
-                    <input type="date" required id="date_debut" min="{{ $formation->date_debut }}"
-                      max="{{ $formation->date_fin }}" wire:model="start" required class="form-control"
-                      name="date_debut">
-                  </div>
-
-
-                  <!-- Formation ID -->
-                  <input type="text" hidden required id="formation_id" wire:model="formation_id" class="form-control"
-                    name="formation_id">
+                        <div class="modal-body">
+                            <!-- Date début -->
+                            <div class="mb-3">
+                                <label for="date_debut" class="form-label">Date</label>
+                                <input type="date" required id="date_debut" min="{{ $formation->date_debut }}"
+                                    max="{{ $formation->date_fin }}" wire:model="start" required class="form-control"
+                                    name="date_debut">
+                            </div>
 
 
-                  <!-- Groupe ID -->
-                  <div class="mb-3">
-                    <label for="groupe_id" class="form-label">Groupe</label>
-                    <select class="form-select" wire:model="groupe_id" required id="groupe_id" name="groupe_id">
-                      @once
-                      <option value="" disabled selected>Selectionner une date</option>
-                      @endonce
+                            <!-- Formation ID -->
+                            <input type="text" hidden required id="formation_id" wire:model="formation_id"
+                                class="form-control" name="formation_id">
 
-                    </select>
-                  </div>
 
-                  <!-- Salle ID -->
-                  <div class="mb-3">
-                    <label for="salle_id" class="form-label">Salle</label>
-                    <select class="form-select" required wire:model="salle_id" id="salle_id" name="salle_id">
-                      @once
-                      <option value="" disabled selected>Selectionner une date</option>
-                      @endonce
+                            <!-- Groupe ID -->
+                            <div class="mb-3">
+                                <label for="groupe_id" class="form-label">Groupe</label>
+                                <select class="form-select" wire:model="groupe_id" required id="groupe_id"
+                                    name="groupe_id">
+                                    @once
+                                        <option value="" disabled selected>Selectionner une date</option>
+                                    @endonce
 
-                    </select>
-                  </div>
-                  <!-- Formateur ID -->
-                  <div class="mb-3">
-                    <label for="salle_id" class="form-label">Formateur</label>
-                    <select class="form-select" required wire:model="formateur_id" id="formateur_id"
-                      name="formateur_id">
-                      @once
-                      <option value="" disabled selected>Selectionner une date</option>
-                      @endonce
+                                </select>
+                            </div>
 
-                    </select>
-                  </div>
-                </div>
+                            <!-- Salle ID -->
+                            <div class="mb-3">
+                                <label for="salle_id" class="form-label">Salle</label>
+                                <select class="form-select" required wire:model="salle_id" id="salle_id"
+                                    name="salle_id">
+                                    @once
+                                        <option value="" disabled selected>Selectionner une date</option>
+                                    @endonce
 
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-                  @if ($modification)
-                  <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                  @else
-                  <button type="submit" class="btn btn-primary">Enregistrer</button>
-                  @endif
-                </div>
+                                </select>
+                            </div>
+                            <!-- Formateur ID -->
+                            <div class="mb-3">
+                                <label for="salle_id" class="form-label">Formateur</label>
+                                <select class="form-select" required wire:model="formateur_id" id="formateur_id"
+                                    name="formateur_id">
+                                    @once
+                                        <option value="" disabled selected>Selectionner une date</option>
+                                    @endonce
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Fermer</button>
+                            @if ($modification)
+                                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                            @else
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            @endif
+                        </div>
         </form>
-      </div>
     </div>
-  </div>
+</div>
+</div>
 </div>
 
 
 <script src="
-https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
-"></script>
+        https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
+        "></script>
 <script>
-  document.addEventListener('livewire:load', function() {
+    document.addEventListener('livewire:load', function() {
         var Calendar = FullCalendar.Calendar;
         var Draggable = FullCalendar.Draggable;
         var calendarEl = document.getElementById('calendar');
@@ -225,9 +252,11 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
         }
 
         function hideModal() {
-            var modal = new bootstrap.Modal(document.getElementById('modalCenter'));
-            modal.hide();
+            $("#modalCenter [data-bs-dismiss=modal]").trigger({
+                type: "click"
+            });
         }
+
         @this.on(`hideModal`, () => {
             hideModal();
         });
@@ -261,13 +290,14 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
             });
             $.each(data.groupes, function(index, groupe) {
                 var option = new Option(groupe.nom, groupe.id);
-                if (groupe.id === @this.groupe_id ) {
+                if (groupe.id === @this.groupe_id) {
                     option.selected = true;
                 }
                 groupeSelect.append(option);
             });
 
             $.each(data.formateurs, function(index, formateur) {
+                console.log(formateur);
                 formateurSelect.append(new Option((formateur.user.nom + " " + formateur.user
                     .prenom), formateur.id));
             });
@@ -275,8 +305,17 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
 
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        tippy('.user-info', {
+            placement: 'top', // Adjust the placement as per your needs
+            allowHTML: true // Enable HTML content in the tooltip
+        });
+    });
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
+<script src="https://unpkg.com/popper.js@1"></script>
+<script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js"></script>
 <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js"></script>
 <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/locale/fr.js"></script>

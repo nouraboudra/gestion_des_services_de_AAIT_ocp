@@ -2,7 +2,6 @@ const { EnvironmentPlugin } = require('webpack');
 const mix = require('laravel-mix');
 const glob = require('glob');
 const path = require('path');
-
 /*
  |--------------------------------------------------------------------------
  | Configure mix
@@ -20,7 +19,6 @@ mix.options({
  | Configure Webpack
  |--------------------------------------------------------------------------
  */
-
 mix.webpackConfig({
   output: {
     publicPath: process.env.ASSET_URL || undefined,

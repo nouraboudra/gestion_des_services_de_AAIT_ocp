@@ -14,6 +14,7 @@ use App\Http\Controllers\presence\PresenceCandidatController;
 use App\Http\Controllers\saadtest\SaadtestControllers;
 
 use App\Http\Controllers\TestController;
+use App\Http\Livewire\ManageFormateurs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -58,18 +59,18 @@ use App\Http\Livewire\SessionPlanification;
 
 
 
-use App\Http\Controllers\form_elements\Role;
 
-use App\Http\Controllers\Admin\Showuser;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\authentications\AuthController;
 use App\Http\Controllers\authentications\RegisterController;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic;
-use App\Models\CandidatEcosysteme;
-use Illuminate\Routing\Route as RoutingRoute;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Livewire\Formateur;
+use App\Http\Livewire\FormateursManagement;
+use App\Http\Livewire\GroupeManagement;
+use App\Http\Livewire\UsersManagement;
+use Livewire\Livewire;
 
 // Main Page Route
 
@@ -98,15 +99,20 @@ Route::get('/download-example', function () {
   return response()->download($path);
 })->name('download.example');
 
-//presence
-Route::resource('presence/presence', PresenceCandidatController::class);
+
 
 Route::get('/saadtest', [SaadtestControllers::class, 'index']);
 
 // authentication
 Route::middleware('auth')->group(function () {
+
   Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard');
   Route::get('/', [Analytics::class, 'index']);
+  Route::middleware(['role:formateur'])->group(function () {
+
+    //presence
+    Route::resource('presence/presence', PresenceCandidatController::class);
+  });
   //for admin :
   //roles
   Route::prefix('admin')->group(function () {
@@ -123,51 +129,63 @@ Route::middleware('auth')->group(function () {
           'edit' => 'roles.edit',
         ]);
       //users
+      Route::get('users', UsersManagement::class)->name('admin.users.index');
 
       Route::resource('users', UsersController::class)
-        ->except(['update'])
+        ->except(['update', 'index'])
         ->names([
-          'index' => 'admin.users.index',
           'create' => 'users.create',
           'show' => 'users.show',
           'destroy' => 'users.delete',
           'store' => 'users.store',
         ]);
     });
-
-
-    //salles
-    Route::middleware(['role:planificateur'])->group(function () {
-
-      Route::resource('salles', SalleController::class)
-        ->except(['show'])
-        ->names([
-          'index' => 'admin.salles.index',
-          'create' => 'salles.create',
-          'store' => 'salles.store',
-          'destroy' => 'admin.salles.destroy',
-          'edit' => 'admin.salles.edit',
-          'update' => 'admin.salles.update',
-        ]);
-    });
+  });
+  //todo
+  Route::middleware(['role:planificateur'])->group(function () {
+    Route::get('school/formateurs', FormateursManagement::class)->name('school.formateurs.index');
   });
 
+
   //planification
+  Route::get('livewire/message/formation-planification', FormationPlanification::class);
+  Route::get('livewire/message/session-planification', SessionPlanification::class);
+  Route::get('livewire/message/formateurs-management', FormateursManagement::class);
+  Route::get('livewire/message/groupe-management', FormateursManagement::class);
+  Route::get('livewire/message/users-management', UsersManagement::class);
+
   Route::get('planing/formations', FormationPlanification::class)->name('planing.formations.index');
-  Route::post('planing/formations', [PlanificationController::class, 'store'])->name('planing.formations.store');
   Route::get('planing/{id}/sessions', SessionPlanification::class)->name('planing.sessions.index');
   Route::post('planing/sessions', [SessionFormationController::class, 'store'])->name('planing.sessions.store');
   Route::delete('planing/sessions/{id}', [SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
 
-  Route::get('planing/themes', [ThemeController::class, 'index'])->name('planing.themes.index');
-  Route::post('planing/themes', [ThemeController::class, 'store'])->name('planing.themes.store');
-  Route::delete('planing/themes/{id}', [ThemeController::class, 'destroy'])->name('planing.themes.destroy');
+  Route::get('school/groupes', GroupeManagement::class)->name('school.groupes.index');
 
-  Route::get('planing/domaines', [DomainController::class, 'index'])->name('planing.domaines.index');
-  Route::post('planing/domaines', [DomainController::class, 'store'])->name('planing.domaines.store');
-  Route::delete('planing/domaines/{id}', [DomainController::class, 'destroy'])->name('planing.domaines.destroy');
+  Route::get('school/themes', [ThemeController::class, 'index'])->name('school.themes.index');
+  Route::post('school/themes', [ThemeController::class, 'store'])->name('school.themes.store');
+  Route::delete('school/themes/{id}', [ThemeController::class, 'destroy'])->name('school.themes.destroy');
+
+  Route::get('school/domaines', [DomainController::class, 'index'])->name('school.domaines.index');
+  Route::post('school/domaines', [DomainController::class, 'store'])->name('school.domaines.store');
+  Route::delete('school/domaines/{id}', [DomainController::class, 'destroy'])->name('school.domaines.destroy');
+
+  //school
+  //formateurs
 
 
+  //salles
+  Route::middleware(['role:planificateur'])->group(function () {
+    Route::resource('school/salles', SalleController::class)
+      ->except(['show'])
+      ->names([
+        'index' => 'school.salles.index',
+        'create' => 'salles.create',
+        'store' => 'salles.store',
+        'destroy' => 'school.salles.destroy',
+        'edit' => 'school.salles.edit',
+        'update' => 'school.salles.update',
+      ]);
+  });
   //mail
   Route::get('/send-test-email', [TestController::class, 'sendTestEmail']);
   Route::post('candidatEcosysteme/upload', [CandidatEcosystemeController::class, 'upload'])->name('candidatEcosysteme.upload');

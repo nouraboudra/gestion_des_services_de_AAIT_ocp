@@ -19,6 +19,7 @@ class PlanificateurSeeder extends Seeder
     User::factory()->count(5)->create()->each(function ($user) {
       $planificateur = new Planificateur();
       $planificateur->save();
+      $user->assignRole('planificateur');
       $planificateur->user()->save($user);
     });
   }

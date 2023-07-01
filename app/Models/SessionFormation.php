@@ -39,7 +39,7 @@ class SessionFormation extends Model
     return $this->hasMany(Absence::class);
   }
 
-  public function formateurs()
+  public function formateur()
   {
     return $this->belongsTo(Formateur::class);
   }
