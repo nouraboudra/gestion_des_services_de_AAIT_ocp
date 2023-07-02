@@ -4,7 +4,7 @@
     </h4>
 
     <div class="card">
-        <h5 class="card-header">Sessions</h5>
+        <h5 class="card-header">Groupes</h5>
         <div class="card-body">
             <div class="d-flex align-items-start align-items-sm-center justify-content-between mb-3">
                 <div class="input-group input-group-merge">
@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
                     <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
-                        <option value="10">5</option>
+                        <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
@@ -31,15 +31,22 @@
                     <thead>
                         <tr>
                             <th>Nom</th>
-                            <th>Capacité</th>
+                            <th>Capacité Maximal</th>
+                            <th>Capacité Actuel</th>
+                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($groupes as $groupe)
                             <tr>
-                                <td>{{ $groupe->nom }}</td>
+                                <td><a
+                                        href=" {{ $groupe->type == 'ocp' ? route('school.groupes.candidats.ocp.index', $groupe->id) : route('school.groupes.candidats.ecosystem.index', $groupe->id) }}">{{ $groupe->nom }}</a>
+                                </td>
                                 <td>{{ $groupe->capacite }}</td>
+                                <td>{{ sizeof($groupe->candidats) }}</td>
+                                <td>{{ $groupe->type }}</td>
+
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -94,6 +101,26 @@
                                             wire:model="capacite" class="form-control" id="capacite" name="capacite"
                                             placeholder="Entrez la capacité">
                                     </div>
+                                    <!-- User Type Selection -->
+                                    <div class="mb-3">
+                                        <label for="userType" class="form-label">Type d'utilisateur</label>
+                                        <select wire:model="userType" id="userType" class="form-select">
+                                            <option value="" disabled selected>Selectionner un groupe</option>
+                                            <option value="ocp">OCP Groupe</option>
+                                            <option value="ecosysteme">Ecosysteme Groupe</option>
+                                        </select>
+                                    </div>
+                                    <!-- Search Field -->
+                                    <div class="mb-3">
+                                        <label for="search" class="form-label">Search</label>
+                                        <input wire:model.debounce.500ms="searchMembers" type="text" id="search"
+                                            class="form-control" placeholder="Search Candidate">
+                                    </div>
+
+                                    <!-- Search Results -->
+                                    <div id="searchResults" class="list-group"
+                                        style="max-height: 200px; overflow-y: auto;"></div>
+
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary"
@@ -110,3 +137,64 @@
         </div>
     </div>
 </div>
+<script>
+    let selectedCandidates = [];
+
+    document.addEventListener('livewire:load', function() {
+        @this.on(`searchResultsUpdated`, function(data) {
+
+            let searchResultsElement = document.getElementById('searchResults');
+            searchResultsElement.innerHTML = '';
+            data.forEach(result => {
+                console.log(result);
+
+                let itemHTML = `
+            <a href="#" id="candidate-${result.id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="selectCandidate(${result.id})">
+                <div>
+                    <p class="mb-0">${result.user.nom} ${result.user.prenom}</p>
+                </div>
+                <div>
+                    <i id="checkmark-${result.id}" class="${selectedCandidates.includes(result.id) ? '' : 'd-none'} bx bx-check"></i>
+                </div>
+            </a>
+        `;
+                searchResultsElement.innerHTML += itemHTML;
+
+            });
+        });
+
+        function hideModal() {
+            $("#modalCenter [data-bs-dismiss=modal]").trigger({
+                type: "click"
+            });
+        }
+
+        @this.on(`hideModal`, () => {
+            hideModal();
+        });
+
+    });
+
+    function selectCandidate(id) {
+
+
+        let candidateElement = document.getElementById(`candidate-${id}`);
+        let checkmarkElement = document.getElementById(`checkmark-${id}`);
+
+        if (selectedCandidates.includes(id)) {
+            let index = selectedCandidates.indexOf(id);
+            if (index > -1) {
+                selectedCandidates.splice(index, 1);
+            }
+            checkmarkElement.classList.add('d-none');
+        } else {
+            selectedCandidates.push(id);
+            checkmarkElement.classList.remove('d-none');
+        }
+        // Update Livewire component property
+        @this.set('selectedCandidates', selectedCandidates);
+        window.livewire.emit('selectCandidat', selectedCandidates);
+
+
+    }
+</script>

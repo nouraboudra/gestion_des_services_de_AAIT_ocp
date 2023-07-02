@@ -47,13 +47,13 @@ class ThemeController extends Controller
             'domain_id.exists' => 'Le domaine sélectionné n\'existe pas.',
         ];
 
-        $validator = Validator::make($request->all(),$rules, $customMessages);
-        
+        $validator = Validator::make($request->all(), $rules, $customMessages);
+
         if ($validator->fails()) {
             foreach ($validator->errors()->all() as $message) {
                 toastr()->error($message);
             }
-            return redirect()->route('planing.themes.create');
+            return redirect()->route('school.themes.create');
         }
 
         Theme::create([
@@ -62,7 +62,7 @@ class ThemeController extends Controller
         ]);
 
         toastr()->success('Thème ajouté avec succès');
-        return redirect()->route('planing.themes.index');
+        return redirect()->route('school.themes.index');
     }
 
     /**
@@ -75,7 +75,7 @@ class ThemeController extends Controller
     {
         $theme = Theme::find($id);
 
-        if(!$theme) {
+        if (!$theme) {
             Toastr::error('Theme not found.', 'Error');
             return redirect()->back();
         }

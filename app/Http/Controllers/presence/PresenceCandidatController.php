@@ -18,13 +18,16 @@ class PresenceCandidatController extends Controller
     {
         $formateur = Auth::user()->userable;
         $today = Carbon::today();
+        $candidats = [];
         // Retrieve the sessions of today for the formateur
         $session = SessionFormation::where('formateur_id', $formateur->id)
             ->whereDate('date_debut', $today)
             ->first();
         $sessionCount = SessionFormation::whereDate('date_debut', '<', $today)->count();
-        $session = $session->load('groupe.candidats');
-        $candidats = $session->groupe->candidats;
+        if ($session) {
+            $session =  $session->load('groupe.candidats');
+            $candidats = $session->groupe->candidats;
+        }
         return view('content.presence.presence-presence-index', compact('session', 'candidats', 'sessionCount'));
     }
 

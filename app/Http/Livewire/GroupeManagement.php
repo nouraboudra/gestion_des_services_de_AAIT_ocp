@@ -2,7 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Candidat;
+use App\Models\CandidatEcosysteme;
+use App\Models\CandidatOcp;
 use App\Models\Groupe;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,9 +17,15 @@ class GroupeManagement extends Component
     use WithPagination;
 
     public $pageSize = 5;
+    public $selectedCandidates = [];
+    public $searchResults;
+    public $userType = '';
+
     public $search = '';
+    public $searchMembers = '';
     public $nom;
     public $capacite;
+
 
     protected $rules = [
         'nom' => 'required|string',
@@ -47,10 +57,13 @@ class GroupeManagement extends Component
             return;
         }
 
-        Groupe::create([
+        $groupe = Groupe::create([
             'nom' => $this->nom,
             'capacite' => $this->capacite,
+            'type' => $this->userType,
+
         ]);
+        $groupe->candidats()->attach($this->selectedCandidates);
 
         $this->resetInputs();
 
@@ -72,6 +85,7 @@ class GroupeManagement extends Component
         return [
             'nom' => $this->nom,
             'capacite' => $this->capacite,
+            'type' => $this->userType,
         ];
     }
 
@@ -79,5 +93,32 @@ class GroupeManagement extends Component
     {
         $this->nom = '';
         $this->capacite = null;
+        $this->userType = '';
+        $this->searchMembers = '';
+    }
+    public function updatedSearchMembers()
+    {
+        $candidats = [];
+        if ($this->userType === 'ocp') {
+            $candidats = Candidat::whereHas('user', function ($query) {
+                $query->where('nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
+                    ->orWhere('matricule', 'like', '%' . $this->search . '%');
+            })
+                ->where('candidatable_type', CandidatOcp::class)
+                ->get();
+            $candidats = $candidats->load('user');
+        } elseif ($this->userType === 'ecosysteme') {
+            $candidats = Candidat::whereHas('user', function ($query) {
+                $query->where('nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
+                    ->orWhere('matricule', 'like', '%' . $this->search . '%');
+            })
+                ->where('candidatable_type', CandidatEcosysteme::class)
+                ->get();
+            $candidats = $candidats->load('user');
+        }
+
+        $this->emit('searchResultsUpdated', $candidats);
     }
 }

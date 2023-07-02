@@ -181,6 +181,9 @@ return [
     App\Providers\RouteServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
     Maatwebsite\Excel\ExcelServiceProvider::class,
+    Panoscape\History\HistoryServiceProvider::class,
+    Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
 
   ],
 
@@ -196,6 +199,8 @@ return [
     */
 
   'aliases' => Facade::defaultAliases()->merge([
+    'App\History' => Panoscape\History\History::class,
+
     // ...
   ])->toArray(),
 

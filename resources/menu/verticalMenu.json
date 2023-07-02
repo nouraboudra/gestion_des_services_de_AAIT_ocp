@@ -49,8 +49,8 @@
     {
       "name": "Presence",
       "icon": "menu-icon tf-icons bx bx-calendar-check",
-      "slug": "presence-presence",
-      "url": "presence/presence"
+      "slug": "presence.index",
+      "url": "presence"
     },
     {
       "name": "Planification",

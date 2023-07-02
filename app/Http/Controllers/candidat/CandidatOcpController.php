@@ -10,48 +10,49 @@ use Spatie\Permission\Models\Role;
 
 class CandidatOcpController extends Controller
 {
-    
-    public function index()
+
+
+    public function index(Request $request)
     {
+        $pageSize = $request->input('page_size', 10); // Default page size is 10
+
         $roles = Role::all();
         $users = User::with('roles')->get();
-        $candidats = CandidatOcp::all(); // Retrieve all candidats from the database
-
-        return view("content.management.candidat-ocp-index", compact('candidats'));
-        
+        $candidats = CandidatOcp::paginate($pageSize); // Retrieve all candidats from the database
+        return view("content.management.candidat-ocp-index", compact('candidats', 'pageSize'));
     }
 
-    
+
     public function create()
     {
         //
     }
 
-    
+
     public function store(Request $request)
     {
         //
     }
 
-    
+
     public function show($id)
     {
         //
     }
 
-   
+
     public function edit($id)
     {
         //
     }
 
-    
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    
+
     public function destroy($id)
     {
         //

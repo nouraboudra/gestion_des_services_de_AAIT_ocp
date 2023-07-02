@@ -17,8 +17,10 @@ class GroupeFactory extends Factory
     public function definition()
     {
         return [
-            'nom' => $this->faker->randomElement(['Groupe A', 'Groupe B', 'Groupe C']),
+            'nom' => 'Groupe ' . $this->faker->unique()->word,
             'capacite' => $this->faker->numberBetween(20, 40),
+            'type' => $this->faker->randomElement(['ocp', 'ecosysteme']),
+
         ];
     }
 }

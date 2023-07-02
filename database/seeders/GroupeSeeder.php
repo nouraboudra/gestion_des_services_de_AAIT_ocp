@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Candidat;
+use App\Models\CandidatOcp;
 use App\Models\Groupe;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +18,17 @@ class GroupeSeeder extends Seeder
      */
     public function run()
     {
-        Groupe::factory()->count(20)->create();
+
+        Groupe::factory()->count(5)->create()->each(function ($groupe) {
+            User::factory()->count(10)->create()->each(function ($user) use ($groupe) {
+                $candidatOcp = CandidatOcp::factory()->create();
+                $candidat = new Candidat();
+                $candidatOcp->candidat()->save($candidat);
+
+                $candidat->save();
+                $candidat->user()->save($user);
+                $groupe->candidats()->attach($candidat);
+            });
+        });
     }
 }

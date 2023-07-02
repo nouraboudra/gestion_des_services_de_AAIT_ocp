@@ -12,6 +12,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nom');
             $table->integer('capacite');
+            $table->string('type');
             $table->timestamps();
         });
     }

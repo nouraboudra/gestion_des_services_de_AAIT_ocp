@@ -66,9 +66,11 @@ use App\Http\Controllers\authentications\RegisterController;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic;
-use App\Http\Livewire\Formateur;
+use App\Http\Livewire\CandidatEcosystemeManagement;
+use App\Http\Livewire\CandidatOcpManagement;
 use App\Http\Livewire\FormateursManagement;
 use App\Http\Livewire\GroupeManagement;
+use App\Http\Livewire\PresenceManagement;
 use App\Http\Livewire\UsersManagement;
 use Livewire\Livewire;
 
@@ -111,7 +113,8 @@ Route::middleware('auth')->group(function () {
   Route::middleware(['role:formateur'])->group(function () {
 
     //presence
-    Route::resource('presence/presence', PresenceCandidatController::class);
+    Route::resource('presence/presence', PresenceCandidatController::class)->except(['index']);
+    Route::get('presence', PresenceManagement::class)->name('presence.index');
   });
   //for admin :
   //roles
@@ -151,8 +154,10 @@ Route::middleware('auth')->group(function () {
   Route::get('livewire/message/formation-planification', FormationPlanification::class);
   Route::get('livewire/message/session-planification', SessionPlanification::class);
   Route::get('livewire/message/formateurs-management', FormateursManagement::class);
-  Route::get('livewire/message/groupe-management', FormateursManagement::class);
+  Route::get('livewire/message/groupe-management', GroupeManagement::class);
   Route::get('livewire/message/users-management', UsersManagement::class);
+  Route::get('livewire/message/candidat-ocp-management', CandidatOcpManagement::class);
+  Route::get('livewire/message/candidat-ecosysteme-management', CandidatEcosystemeManagement::class);
 
   Route::get('planing/formations', FormationPlanification::class)->name('planing.formations.index');
   Route::get('planing/{id}/sessions', SessionPlanification::class)->name('planing.sessions.index');
@@ -160,6 +165,8 @@ Route::middleware('auth')->group(function () {
   Route::delete('planing/sessions/{id}', [SessionFormationController::class, 'destroy'])->name('planing.sessions.destroy');
 
   Route::get('school/groupes', GroupeManagement::class)->name('school.groupes.index');
+  Route::get('school/groupes/ocp/{id}/candidats', CandidatOcpManagement::class)->name('school.groupes.candidats.ocp.index');
+  Route::get('school/groupes/ecosystem/{id}/candidats', CandidatEcosystemeManagement::class)->name('school.groupes.candidats.ecosystem.index');
 
   Route::get('school/themes', [ThemeController::class, 'index'])->name('school.themes.index');
   Route::post('school/themes', [ThemeController::class, 'store'])->name('school.themes.store');

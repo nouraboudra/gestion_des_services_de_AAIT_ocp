@@ -26,21 +26,23 @@ use Illuminate\Support\Facades\Hash;
 class CandidatEcosystemeController extends Controller
 {
 
-    public function index()
+
+    public function index(Request $request)
     {
+        $pageSize = $request->input('page_size', 10); // Default page size is 10
+
         $users = User::with('roles')->get();
-        $candidats = CandidatEcosysteme::all();
-        return view("content.management.candidat-ecosysteme-index",compact('candidats'));
+        $candidats = CandidatEcosysteme::paginate($pageSize);
+        return view("content.management.candidat-ecosysteme-index", compact('candidats', 'pageSize'));
     }
 
     public function create()
     {
         $roles = Role::where('name', 'candidat_ecosysteme')->get(); // Fetching only 'candidat_ecosysteme' role
         return view('content.management.candidat-ecosysteme-create', compact('roles'));
-        
     }
 
-     
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -58,7 +60,7 @@ class CandidatEcosystemeController extends Controller
             'prenom.required' => 'Le champ Prénom est obligatoire.',
             'nom.required' => 'Le champ Nom est obligatoire.',
             'password.required' => 'Le champ Mot de passe est obligatoire.',
-            
+
         ]);
 
 
@@ -74,41 +76,41 @@ class CandidatEcosystemeController extends Controller
             return redirect()->back();
         }
 
-         // Create a new User instance
-         $user = new User();
-         $user->matricule = $request->input('matricule');
-         $user->email = $request->input('email');
-         $user->prenom = $request->input('prenom');
-         $user->nom = $request->input('nom');
-         $user->password = Hash::make($request->input('password'));
-        
+        // Create a new User instance
+        $user = new User();
+        $user->matricule = $request->input('matricule');
+        $user->email = $request->input('email');
+        $user->prenom = $request->input('prenom');
+        $user->nom = $request->input('nom');
+        $user->password = Hash::make($request->input('password'));
 
-         // Save the user
+
+        // Save the user
         $user->save();
-       // Handle roles assignment
-       if ($request->has('roles')) {
-        $roles = $request->input('roles');
-        if (!is_array($roles)) {
-            $roles = [$roles]; // Convert string to array
-        }
-        $user->roles()->sync($roles);
-        $roles = Role::whereIn('id', $roles)->get();
-        foreach ($roles as $role) {
-            switch ($role->name) {
-                case 'candidat_ecosysteme':
-                    $candidat = new Candidat();
-                    $candidat_ecoSystem = new CandidatEcosysteme();
-                    $candidat_ecoSystem->CIN = $user->matricule;
-                    $candidat_ecoSystem->save();
-                    $candidat_ecoSystem->candidat()->save($candidat);
-                    $candidat->user()->save($user);
-                    break;
-                default:
-                    // Handle other roles if needed
-                    break;
+        // Handle roles assignment
+        if ($request->has('roles')) {
+            $roles = $request->input('roles');
+            if (!is_array($roles)) {
+                $roles = [$roles]; // Convert string to array
+            }
+            $user->roles()->sync($roles);
+            $roles = Role::whereIn('id', $roles)->get();
+            foreach ($roles as $role) {
+                switch ($role->name) {
+                    case 'candidat_ecosysteme':
+                        $candidat = new Candidat();
+                        $candidat_ecoSystem = new CandidatEcosysteme();
+                        $candidat_ecoSystem->CIN = $user->matricule;
+                        $candidat_ecoSystem->save();
+                        $candidat_ecoSystem->candidat()->save($candidat);
+                        $candidat->user()->save($user);
+                        break;
+                    default:
+                        // Handle other roles if needed
+                        break;
+                }
             }
         }
-    }
         toastr()->success("utilisateur créer avec succes");
         // Send email notification to the user
         $matricule = $request->input('matricule');
@@ -120,8 +122,8 @@ class CandidatEcosystemeController extends Controller
         $data = [
             'matricule' => $matricule,
             'password' => $password,
-            'nom' =>$nom,
-            'prenom' =>$prenom,
+            'nom' => $nom,
+            'prenom' => $prenom,
         ];
 
         Mail::to($email)->send(new NewUserNotification($data));
@@ -129,7 +131,7 @@ class CandidatEcosystemeController extends Controller
         // Redirect or perform any other actions as needed
         return redirect()->route('candidatEcosysteme.index');
     }
-  
+
 
     public function upload(Request $request)
     {
@@ -180,7 +182,7 @@ class CandidatEcosystemeController extends Controller
         //
     }
 
-    
+
     public function edit($id)
     {
         //
@@ -191,7 +193,7 @@ class CandidatEcosystemeController extends Controller
         //
     }
 
-    
+
     public function destroy($id)
     {
         //

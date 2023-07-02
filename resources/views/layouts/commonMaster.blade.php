@@ -5,6 +5,10 @@
 
 <head>
     <style>
+        a {
+            color: red;
+        }
+
         .separator {
             height: 1px;
             background-color: #ccc;
@@ -28,21 +32,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/app/logo1.png') }}" />
     <!-- CSS -->
-
-
-
-
-
     @yield('head_includes')
-    <!-- Include Styles -->
     @include('layouts/sections/styles')
     @livewireStyles
-    <!-- Include Scripts for customizer, helper, analytics, config -->
     @include('layouts/sections/scriptsIncludes')
-    <style>
 
-    </style>
-    <!-- JS -->
 
 
 </head>
@@ -60,6 +54,7 @@
     @livewireScripts
     @include('layouts/sections/scripts')
 
+    @yield('additional-scripts')
 
 
 </body>

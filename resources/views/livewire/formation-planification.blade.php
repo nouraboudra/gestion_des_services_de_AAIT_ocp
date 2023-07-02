@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
                     <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
-                        <option value="10">5</option>
+                        <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
