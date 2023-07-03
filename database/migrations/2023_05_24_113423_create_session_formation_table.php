@@ -4,12 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
   public function up()
   {
     Schema::create('session_formations', function (Blueprint $table) {
       $table->increments('id');
+      $table->string('intitule');
       $table->dateTime('date_debut');
       $table->dateTime('date_fin');
 

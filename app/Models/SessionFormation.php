@@ -10,6 +10,7 @@ class SessionFormation extends Model
   use HasFactory;
 
   protected $fillable = [
+    'intitule',
     'date_debut',
     'date_fin',
     'formation_id',
@@ -32,7 +33,6 @@ class SessionFormation extends Model
   {
     return $this->belongsTo(Formation::class);
   }
-
 
   public function absences()
   {

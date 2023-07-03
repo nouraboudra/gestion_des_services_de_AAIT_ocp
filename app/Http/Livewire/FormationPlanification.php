@@ -6,12 +6,17 @@ use App\Models\Theme;
 use Livewire\Component;
 use App\Models\Formation;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\WithPagination;
+use App\Exports\FormationsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Storage;
 
 class FormationPlanification extends Component
 {
   use WithPagination;
+
+
   public $pageSize = 5;
 
   public $search = '';
@@ -61,11 +66,11 @@ class FormationPlanification extends Component
         'title' => $formation->title,
         'start' => $formation->start,
         'end' => $formation->end,
-        'color' => $colors[$key % count($colors)],  // Assign a color from the array.
+        'color' => $colors[$key % count($colors)], // Assign a color from the array.
 
       ];
     }
-    return  json_encode($events);
+    return json_encode($events);
   }
 
 
@@ -106,7 +111,10 @@ class FormationPlanification extends Component
 
 
 
-
+  public function downloadFormations()
+  {
+    return Excel::download(new FormationsExport, 'formations.xlsx');
+  }
 
   public function deleteFormation($id)
   {
@@ -136,6 +144,17 @@ class FormationPlanification extends Component
     ]);
   }
 
+  public function downloadPDF()
+  {
+    $formations = Formation::with('sessionFormations')->get();
+    $pdf = Pdf::loadView('pdf.schedule', ['formations' => $formations]);
+    $pdf->setPaper('A4', 'landscape');
+
+    $output = $pdf->output();
+    $fileName = 'schedule.pdf';
+    Storage::put('public/' . $fileName, $output);
+    $this->emit('download', $fileName);
+  }
 
 
 

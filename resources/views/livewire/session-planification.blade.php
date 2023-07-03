@@ -33,6 +33,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Intitulé</th>
                             <th>Date</th>
                             <th>Groupe</th>
                             <th>Salle</th>
@@ -44,6 +45,8 @@
                         @forelse($sessions as $session)
                             <tr>
                                 <td>{{ $session->id }}</td>
+                                <td>{{ $session->intitule }}</td>
+
                                 <td>{{ date('d-m-Y', strtotime($session->date_debut)) }}</td>
                                 <td>
                                     <div class="user-info"
@@ -121,10 +124,17 @@
                         <!-- Form -->
 
                         <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label for="intitule" class="form-label">Intitulé</label>
+                                <input type="intitule" required id="intitule" wire:model="intitule"
+                                    class="form-control" name="intitule">
+                            </div>
+
                             <!-- Date début -->
                             <div class="mb-3">
                                 <label for="date_debut" class="form-label">Date</label>
-                                <input type="date" required id="date_debut" min="{{ $formation->date_debut }}"
+                                <input type="date" id="date_debut" min="{{ $formation->date_debut }}"
                                     max="{{ $formation->date_fin }}" wire:model="start" required class="form-control"
                                     name="date_debut">
                             </div>

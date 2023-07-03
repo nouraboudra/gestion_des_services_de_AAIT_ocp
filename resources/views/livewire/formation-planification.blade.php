@@ -2,6 +2,29 @@
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Planification /</span> Formations
     </h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-lg">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="button-wrapper">
+                            <button type="button" wire:click="downloadPDF" class="btn btn-primary me-2 mb-4">
+                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Télecharger PDF</span>
+                            </button>
+
+                            <!-- Download button -->
+                            <button type="button" wire:click="downloadFormations" class="btn btn-success me-2 mb-4">
+                                <i class="bx bx-download d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Télécharger Excel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <h5 class="card-header">Formations</h5>
         <div class="card-body">
@@ -260,6 +283,10 @@
             let updatedEvents = JSON.parse(@this
                 .events); // Replace this with the actual function to fetch updated events
             calendar.addEventSource(updatedEvents);
+        });
+        @this.on('download', fileName => {
+            const url = '/storage/' + fileName;
+            window.open(url, '_blank');
         });
     });
 </script>

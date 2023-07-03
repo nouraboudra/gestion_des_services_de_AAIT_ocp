@@ -11,6 +11,7 @@ use App\Models\Salle;
 use App\Models\SessionFormation;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,18 +24,33 @@ class SessionPlanification extends Component
 
   public $showFormations = true;
   public $showThemes = false;
-  protected $rules = [
-    'formateurUserData' => 'nullable',
-  ];
 
   public $formateurUserData = null;
 
   public $modification = false;
   public $formation_id;
-  public $salles  = [], $domains,  $formation, $groupes = [], $formateurs  = [];
-  public $salle_id, $domain_id, $groupe_id, $start, $formateur_id;
+  public $salles = [], $domains, $formation, $groupes = [], $formateurs = [];
+  public $salle_id, $domain_id, $groupe_id, $start, $formateur_id, $intitule;
 
   public $events = '';
+  protected $messages = [
+    'formation_id.required' => 'Le champ Formation est requis.',
+    'intitule.required' => 'Le champ Intitulé est requis.',
+    'intitule.unique' => 'Le champ Intitulé doit être unique.',
+    'start.required' => 'Le champ Début est requis.',
+    'salle_id.required' => 'Le champ Salle est requis.',
+    'groupe_id.required' => 'Le champ Groupe est requis.',
+    'formateur_id.required' => 'Le champ Formateur est requis.',
+  ];
+
+  protected $rules = [
+    'formation_id' => 'required',
+    'intitule' => 'required|unique:session_formations',
+    'start' => 'required',
+    'salle_id' => 'required',
+    'groupe_id' => 'required',
+    'formateur_id' => 'required',
+  ];
 
   public function mount($id)
   {
@@ -49,6 +65,7 @@ class SessionPlanification extends Component
       ->where(function ($query) {
         $query->where('date_debut', 'like', '%' . $this->search . '%')
           ->orWhere('date_fin', 'like', '%' . $this->search . '%')
+          ->orWhere('intitule', 'like', '%' . $this->search . '%')
           ->orWhereHas('groupe', function ($groupeQuery) {
             $groupeQuery->where('nom', 'like', '%' . $this->search . '%');
           })
@@ -98,15 +115,16 @@ class SessionPlanification extends Component
 
     $events = [];
 
-    $sessions = SessionFormation::where('formation_id',  $this->formation_id)->paginate($this->pageSize);;
+    $sessions = SessionFormation::where('formation_id', $this->formation_id)->paginate($this->pageSize);
+    ;
 
     foreach ($sessions as $key => $session) {
       $events[] = [
         'id' => $session->id,
-        'title' => $session->salle->code . "-" . $session->formation->Intitulé,
+        'title' => $session->intitule,
         'start' => $session->date_debut,
         'end' => $session->date_fin,
-        'color' => $colors[$key % count($colors)],  // Assign a color from the array.
+        'color' => $colors[$key % count($colors)], // Assign a color from the array.
 
       ];
     }
@@ -118,7 +136,7 @@ class SessionPlanification extends Component
   {
     $sessionData = SessionFormation::find($session['id']);
     $sessionData->date_debut = explode("T", $session['start'])[0];
-    $sessionData->date_fin =  explode("T", $session['start'])[0];
+    $sessionData->date_fin = explode("T", $session['start'])[0];
     $sessionData->save();
     redirect()->back();
   }
@@ -153,6 +171,7 @@ class SessionPlanification extends Component
     $this->formateurs = $this->formateurs->load('user');
     $this->groupe_id = '';
     $this->salle_id = '';
+    $this->intitule = '';
     $this->formateur_id = '';
 
     // Emit the event with the necessary data
@@ -166,10 +185,23 @@ class SessionPlanification extends Component
 
   public function saveSession()
   {
+
+    $validator = Validator::make($this->all(), $this->rules, $this->messages);
+    if ($validator->fails()) {
+      $errors = $validator->errors();
+
+      foreach ($errors->all() as $error) {
+        toastr()->error($error);
+      }
+
+      return;
+    }
     // Create a new Formation
     try {
       $session = new SessionFormation();
       $session->formation_id = $this->formation_id;
+      $session->intitule = $this->intitule;
+
       $session->date_debut = $this->start;
       $session->date_fin = $this->start;
       $session->salle_id = $this->salle_id;
@@ -191,7 +223,7 @@ class SessionPlanification extends Component
 
     // Reset the input fields
     $this->reset(['salles', 'domains', 'formation', 'groupes', 'formateurs']);
-    $this->reset(['salle_id', 'domain_id', 'groupe_id', 'start', 'formateur_id']);
+    $this->reset(['salle_id', 'domain_id', 'groupe_id', 'start', 'intitule', 'formateur_id']);
     toastr()->success("formation " . $session->formation->Intitulé . " est ajouté avec succes");
 
     redirect()->back();

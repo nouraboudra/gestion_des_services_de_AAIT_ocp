@@ -138,9 +138,9 @@ return [
 
   'providers' => [
 
-    /*
-         * Laravel Framework Service Providers...
-         */
+      /*
+       * Laravel Framework Service Providers...
+       */
     Illuminate\Auth\AuthServiceProvider::class,
     Illuminate\Broadcasting\BroadcastServiceProvider::class,
     Illuminate\Bus\BusServiceProvider::class,
@@ -166,18 +166,18 @@ return [
     Spatie\Permission\PermissionServiceProvider::class,
     Livewire\LivewireServiceProvider::class,
     App\Providers\RepoServiceProvider::class,
+    Barryvdh\DomPDF\ServiceProvider::class,
 
+      /*
+       * Package Service Providers...
+       */
 
-    /*
-         * Package Service Providers...
-         */
-
-    /*
-         * Application Service Providers...
-         */
+      /*
+       * Application Service Providers...
+       */
     App\Providers\AppServiceProvider::class,
     App\Providers\AuthServiceProvider::class,
-    // App\Providers\BroadcastServiceProvider::class,
+      // App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
@@ -201,6 +201,7 @@ return [
 
   'aliases' => Facade::defaultAliases()->merge([
     'App\History' => Panoscape\History\History::class,
+    'PDF' => Barryvdh\DomPDF\Facade::class,
 
     // ...
   ])->toArray(),
