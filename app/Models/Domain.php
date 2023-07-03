@@ -9,7 +9,7 @@ class Domain extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom','chefDomain_id'];
 
     public function formateurs() {
         return $this->belongsToMany(Formateur::class);

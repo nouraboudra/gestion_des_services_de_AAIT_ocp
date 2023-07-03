@@ -23,7 +23,7 @@ class EcosystemSeeder extends Seeder
         $user->matricule = $ecosys->CIN;
         $user->password = Hash::make("test");
 
-    $user->email = User::where('email', "noura.boudra1@gmail.com")->first() ? $user->email : "noura.boudra1@gmail.com";
+        $user->email = User::where('email', "noura.boudra1@gmail.com")->first() ? $user->email : "noura.boudra1@gmail.com";
         $ecosys->candidat()->save($candidat);
         $candidat->user()->save($user);
     }

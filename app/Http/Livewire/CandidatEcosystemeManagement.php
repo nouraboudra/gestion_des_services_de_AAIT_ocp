@@ -31,7 +31,6 @@ class CandidatEcosystemeManagement extends Component
                     ->orWhere('prenom', 'like', '%' . $this->search . '%');
             })
             ->paginate($this->pageSize);
-
         return view("livewire.candidat-ecosysteme-management", compact('candidats'))->extends('layouts.contentNavbarLayout')
             ->section('content');
     }

@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     //\App\Models\User::factory(30)->create();
 
     $this->call(PermissionsSeeder::class);
+    $this->call(RolesSeeder::class);
     $this->call(BatimentsSeeder::class);
     $this->call(TypesSalleSeeder::class);
     $this->call(EcosystemSeeder::class);
@@ -20,7 +21,6 @@ class DatabaseSeeder extends Seeder
     $this->call(FormationSeeder::class);
     $this->call(SalleSeeder::class);
     $this->call(GroupeSeeder::class);
-    $this->call(RolesSeeder::class);
     $this->call(UserSeeder::class);
     $this->call(PlanificateurSeeder::class);
     $this->call(FormateurSeeder::class);

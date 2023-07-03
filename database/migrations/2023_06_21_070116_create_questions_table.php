@@ -6,12 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateQuestionsTable extends Migration
 {
-    
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->float('score');
+            $table->string('title',500);
+            $table->string('answers',500);
+            $table->string('right_answer',500);
+            $table->integer('score');
+            $table->foreignId('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->timestamps();
         });
     }

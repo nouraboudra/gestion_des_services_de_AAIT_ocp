@@ -63,9 +63,16 @@ use App\Http\Livewire\SessionPlanification;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\authentications\AuthController;
 use App\Http\Controllers\authentications\RegisterController;
+use App\Http\Controllers\Candidat\CandidatExamController;
+use App\Http\Controllers\Domaines\DomaineController;
+use App\Http\Controllers\Exams\ExamController;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Libraries\LibraryController;
+use App\Http\Controllers\Questions\QuestionController;
 use App\Http\Controllers\tables\Basic;
+use App\Http\Controllers\Themes\ThemeController as ThemesThemeController;
 use App\Http\Livewire\CandidatEcosystemeManagement;
 use App\Http\Livewire\CandidatOcpManagement;
 use App\Http\Livewire\FormateursManagement;
@@ -261,3 +268,33 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 // tables
 Route::get('/tables/basic', [Basic::class, 'index'])->name('tables-basic');
 Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
+
+
+
+   //========Domaine=========
+    Route::resource('Domaines', DomaineController::class);
+
+
+//========Themes=========
+    Route::resource('Themes', ThemesThemeController::class)->except(['show']);
+    //Route::get('Themes', [ThemesThemeController::class, 'index']);
+
+    Route::post('delete_all', [ThemesThemeController::class,'delete_all'])->name('delete_all');
+
+    Route::post('Filter_Classes',[ThemesThemeController::class,'Filter_Classes'])->name('Filter_Classes');
+
+//========Library=========
+    Route::resource('library',LibraryController::class);
+    Route::get('/classes/{id}', [LibraryController::class,'getclasses']);
+    Route::get('download_file/{filename}', [LibraryController::class,'downloadAttachment'])->name('downloadAttachment');
+
+//========Exam=========
+    Route::resource('Exams',ExamController::class);
+
+//========Question=========
+    Route::resource('questions',QuestionController::class);
+
+//========Candidat Exam=========
+    Route::resource('candidat_exams',CandidatExamController::class);
+//========DASHBOARD=========
+Route::get('/board', [HomeController::class, 'index'])->name('board');

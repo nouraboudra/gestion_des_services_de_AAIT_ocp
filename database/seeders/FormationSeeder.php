@@ -21,8 +21,9 @@ class FormationSeeder extends Seeder
     {
         $user = User::factory()->create();
         $planificateur = new Planificateur();
-        $planificateur->user()->save($user);
         $planificateur->save();
+        $planificateur->user()->save($user);
+        $user->assignRole('planificateur');
         $domaine = new Domain();
         $domaine->nom = 'IT';
         $domaine->save();

@@ -10,7 +10,6 @@ class CreateBanqueQuestionsTable extends Migration
     {
         Schema::create('banque_questions', function (Blueprint $table) {
             $table->id();
-            
             $table->timestamps();
         });
     }

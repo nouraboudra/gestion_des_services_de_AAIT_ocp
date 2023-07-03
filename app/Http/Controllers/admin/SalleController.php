@@ -78,7 +78,7 @@ class SalleController extends Controller
         $salle->save();
         toastr()->success("Salle créée avec succès");
 
-        return redirect()->route("admin.salles.index");
+        return redirect()->route("school.salles.index");
     }
 
 
@@ -126,7 +126,7 @@ class SalleController extends Controller
 
         toastr()->success("Salle modifiée avec succès");
 
-        return redirect()->route("admin.salles.index");
+        return redirect()->route("school.salles.index");
     }
 
     public function destroy($id)
@@ -136,6 +136,6 @@ class SalleController extends Controller
 
         toastr()->success("Salle supprimée avec succès");
 
-        return redirect()->route("admin.salles.index");
+        return redirect()->route("school.salles.index");
     }
 }

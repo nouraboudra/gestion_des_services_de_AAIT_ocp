@@ -15,10 +15,10 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    $roles = Role::all();
+    $adminRole = Role::where('name', 'admin')->first();
 
-    User::factory()->count(5)->create()->each(function ($user) use ($roles) {
-      $user->roles()->attach($roles->random());
+    User::factory()->count(5)->create()->each(function ($user) use ($adminRole) {
+      $user->roles()->attach( $adminRole->id);
     });
   }
 }

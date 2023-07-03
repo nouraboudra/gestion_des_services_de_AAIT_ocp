@@ -1,3 +1,12 @@
+@php
+    $userRoles = Auth::user()->roles->pluck('name')->toArray();
+    $filteredMenu = collect($menuData[0]->menu)->filter(function ($item) use ($userRoles) {
+        if (isset($item->roles)) {
+            return count(array_intersect($item->roles, $userRoles)) > 0;
+        }
+        return true;
+    });
+@endphp
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
     <!-- ! Hide app brand if navbar-full -->
@@ -10,7 +19,7 @@
             </span>
 
         </a>
-
+@ro
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-autod-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
@@ -19,7 +28,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        @foreach ($menuData[0]->menu as $menu)
+        @foreach ($filteredMenu  as $menu)
             {{-- adding active and open class if child is active --}}
 
             {{-- menu headers --}}
