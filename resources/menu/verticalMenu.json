@@ -8,14 +8,17 @@
     },
     {
       "menuHeader": "Permissions",
-      "roles": ["admin"]
-
+      "roles": [
+        "admin"
+      ]
     },
     {
       "name": "Gestion d'utilisateur",
       "icon": "menu-icon tf-icons bx bx bx-user",
       "slug": "admin",
-      "roles": ["admin"],
+      "roles": [
+        "admin"
+      ],
       "submenu": [
         {
           "url": "admin/users",
@@ -36,8 +39,10 @@
       "name": "Gestion Candidats",
       "icon": "menu-icon tf-icons bx bx-user-circle",
       "slug": "candidat",
-      "roles": ["planificateur","chefFormation"],
-
+      "roles": [
+        "planificateur",
+        "chefFormation"
+      ],
       "submenu": [
         {
           "url": "candidat/candidatOcp",
@@ -56,15 +61,17 @@
       "icon": "menu-icon tf-icons bx bx-calendar-check",
       "slug": "presence.index",
       "url": "presence",
-      "roles": ["formateur"]
-
+      "roles": [
+        "formateur"
+      ]
     },
     {
       "name": "Planification",
       "icon": "menu-icon tf-icons bx bx-calendar",
       "slug": "planing",
-      "roles": ["planificateur"],
-
+      "roles": [
+        "planificateur"
+      ],
       "submenu": [
         {
           "url": "planing/formations",
@@ -74,8 +81,13 @@
       ]
     },
     {
-      "name": "Gestion d'école",
+      "name": "Gestion du centre",
       "icon": "menu-icon tf-icons bx bx-book-alt",
+      "roles": [
+        "planificateur",
+        "chefFormation",
+        "admin"
+      ],
       "slug": "school",
       "submenu": [
         {
@@ -104,7 +116,18 @@
           "slug": "school.groupes.index"
         }
       ]
+    },
+    {
+      "name": "Test Dashboard",
+      "icon": "menu-icon tf-icons bx bx-edit-alt",
+      "roles": [
+        "formateur",
+        "candidat_ecosystem",
+        "candidat_ocp",
+        "admin"
+      ],
+      "url": "board",
+      "slug": "board"
     }
-    
   ]
 }

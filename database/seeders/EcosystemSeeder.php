@@ -16,6 +16,7 @@ class EcosystemSeeder extends Seeder
     {
 
         $user = User::factory()->create();
+        $user->assignRole('candidat_ecosysteme');
         $candidat = new Candidat();
 
         $ecosys = CandidatEcosysteme::factory()->create();

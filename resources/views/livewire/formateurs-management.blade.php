@@ -1,6 +1,6 @@
 <div>
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Gestion école/</span> Formateurs
+        <span class="text-muted fw-light">Gestion du centre/</span> Formateurs
     </h4>
 
     <div class="card">

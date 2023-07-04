@@ -4,7 +4,7 @@
 
 @section('content')
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Gestion école /</span> Domaines
+        <span class="text-muted fw-light">Gestion du centre /</span> Domaines
     </h4>
 
     <div class="row">

@@ -1,5 +1,7 @@
 @php
-    $userRoles = Auth::user()->roles->pluck('name')->toArray();
+    $userRoles = Auth::user()
+        ->roles->pluck('name')
+        ->toArray();
     $filteredMenu = collect($menuData[0]->menu)->filter(function ($item) use ($userRoles) {
         if (isset($item->roles)) {
             return count(array_intersect($item->roles, $userRoles)) > 0;
@@ -19,7 +21,6 @@
             </span>
 
         </a>
-@ro
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-autod-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
@@ -28,7 +29,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        @foreach ($filteredMenu  as $menu)
+        @foreach ($filteredMenu as $menu)
             {{-- adding active and open class if child is active --}}
 
             {{-- menu headers --}}
@@ -44,7 +45,6 @@
                     if ($currentRouteName === $menu->slug) {
                         $activeClass = 'active';
                     } elseif (isset($menu->submenu)) {
-
                         if (gettype($menu->slug) === 'array') {
                             foreach ($menu->slug as $slug) {
                                 if (str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) {

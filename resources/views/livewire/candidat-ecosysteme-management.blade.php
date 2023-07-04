@@ -2,7 +2,7 @@
 
 
         <h4 class="fw-bold py-3 mb-4">
-            <span class="text-muted fw-light">Gestion école / <a style="color: inherit;"
+            <span class="text-muted fw-light">Gestion du centre / <a style="color: inherit;"
                     href="{{ route('school.groupes.index') }}">Groupes</a></span>
             / {{ $groupe->nom }}
         </h4>

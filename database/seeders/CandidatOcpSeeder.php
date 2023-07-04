@@ -11,18 +11,16 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class CandidatOcpSeeder extends Seeder
-{       
+{
     public function run()
     {
-        $candidatOcpRole = new Role();
-        $candidatOcpRole->name = "candidat_ocp";
-        $candidatOcpRole->save();
 
         $user = User::factory()->create();
+        $user->assignRole('candidat_ocp');
         $candidat = new Candidat();
         $ocps = CandidatOcp::factory()->create();
 
-       
+
         $user->matricule = $ocps->Matricule;
         $user->password = Hash::make("test");
         $ocps->candidat()->save($candidat);
