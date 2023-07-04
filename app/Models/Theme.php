@@ -9,22 +9,30 @@ class Theme extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'domain_id'];
+    protected $fillable = ['nom', 'domain_id', 'Description_Theme', 'Domaine_id'];
 
-    public function domain() {
+    public function domain()
+    {
         return $this->belongsTo(Domain::class);
     }
 
-    public function tests() {
+    public function tests()
+    {
         return $this->hasMany(Test::class);
     }
-    
-    public function documents() {
+    public function Domaines()
+    {
+        return $this->belongsTo('App\Models\Domaine', 'Domaine_id');
+    }
+
+    public function documents()
+    {
         return $this->hasMany(Document::class);
     }
-    
-    public function planFormations() {
+
+    public function planFormations()
+    {
         return $this->belongsToMany(Formation::class);
     }
-    
+
 }
