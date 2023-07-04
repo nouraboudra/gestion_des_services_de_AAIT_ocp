@@ -64,11 +64,11 @@
                     <div class="form-group mb-0">
                         <label for="page-size" class="form-label me-2">Taille de la page:</label>
                         <select id="page-size" class="form-select form-select-sm">
-                            <option value="5" {{ $pageSize == 5 ? 'selected' : '' }}>5</option>
-                            <option value="10" {{ $pageSize == 10 ? 'selected' : '' }}>10</option>
-                            <option value="20" {{ $pageSize == 20 ? 'selected' : '' }}>20</option>
-                            <option value="30" {{ $pageSize == 30 ? 'selected' : '' }}>30</option>
-                            <option value="50" {{ $pageSize == 50 ? 'selected' : '' }}>50</option>
+                            <option value="5" {{ $page_size == 5 ? 'selected' : '' }}>5</option>
+                            <option value="10" {{ $page_size == 10 ? 'selected' : '' }}>10</option>
+                            <option value="20" {{ $page_size == 20 ? 'selected' : '' }}>20</option>
+                            <option value="30" {{ $page_size == 30 ? 'selected' : '' }}>30</option>
+                            <option value="50" {{ $page_size == 50 ? 'selected' : '' }}>50</option>
                         </select>
                     </div>
                 </div>
@@ -124,8 +124,8 @@
         $(document).ready(function() {
             // Handle page size change
             $('#page-size').on('change', function() {
-                var pageSize = $(this).val();
-                var url = "{{ route('candidatEcosysteme.index') }}" + "?page_size=" + pageSize;
+                var page_size = $(this).val();
+                var url = "{{ route('candidatEcosysteme.index') }}" + "?page_size=" + page_size;
                 window.location.href = url;
             });
         });

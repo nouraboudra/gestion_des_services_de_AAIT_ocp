@@ -29,11 +29,11 @@ class CandidatEcosystemeController extends Controller
 
     public function index(Request $request)
     {
-        $pageSize = $request->input('page_size', 10); // Default page size is 10
+        $page_size = $request->input('page_size', 10); // Default page size is 10
 
         $users = User::with('roles')->get();
-        $candidats = CandidatEcosysteme::paginate($pageSize);
-        return view("content.management.candidat-ecosysteme-index", compact('candidats', 'pageSize'));
+        $candidats = CandidatEcosysteme::paginate($page_size);
+        return view("content.management.candidat-ecosysteme-index", compact('candidats', 'page_size'));
     }
 
     public function create()

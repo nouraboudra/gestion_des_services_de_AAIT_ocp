@@ -12,9 +12,9 @@ class UsersManagement extends Component
     use WithPagination;
 
     public $search = '';
-    public $pageSize = 10;
+    public $page_size = 10;
 
-    protected $queryString = ['search', 'pageSize'];
+
 
     public function render()
     {
@@ -22,7 +22,7 @@ class UsersManagement extends Component
             ->orWhere('prenom', 'like', '%' . $this->search . '%')
             ->orWhere('email', 'like', '%' . $this->search . '%')
             ->orWhere('matricule', 'like', '%' . $this->search . '%')
-            ->paginate($this->pageSize);
+            ->paginate($this->page_size);
 
         return view('livewire.users-management', compact('users'))->extends('layouts.contentNavbarLayout')->section('content');
     }

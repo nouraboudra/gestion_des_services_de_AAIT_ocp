@@ -58,123 +58,129 @@
                         </thead>
                         <tbody>
                             <?php $i = 0; ?>
+
+
+
                             @foreach ($Themes as $Theme)
-                                <tr>
-                                    <?php $i++; ?>
-                                    <td><input type="checkbox" value="{{ $Theme->id }}" class="box1"></td>
-                                    <td>{{ $i }}</td>
-                                    <td>{{ $Theme->nom }}</td>
-                                    <td>{{ $Theme->Domaines->Name }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                            data-target="#edit{{ $Theme->id }}" title="Modifier"><i
-                                                class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                            data-target="#delete{{ $Theme->id }}" title="Supprimer"><i
-                                                class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <!-- edit_modal_Domaine -->
+                                @if ($Theme->Domaines)
+                                    <tr>
+                                        <?php $i++; ?>
+                                        <td><input type="checkbox" value="{{ $Theme->id }}" class="box1"></td>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ $Theme->nom }}</td>
+                                        <td>{{ $Theme->Domaines->Name }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                data-target="#edit{{ $Theme->id }}" title="Modifier"><i
+                                                    class="fa fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#delete{{ $Theme->id }}" title="Supprimer"><i
+                                                    class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <!-- edit_modal_Domaine -->
 
-                                <div class="modal fade" id="edit{{ $Theme->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 style="font-family: 'Cairo', sans-serif;" class="modal-title"
-                                                    id="exampleModalLabel">
-                                                    Modifier
-                                                </h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- edit_form -->
-                                                <form action="{{ route('Themes.update', 'test') }}" method="post">
-                                                    {{ method_field('patch') }}
-                                                    @csrf
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <label for="Name" class="mr-sm-2">Nom de la classe
+                                    <div class="modal fade" id="edit{{ $Theme->id }}" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 style="font-family: 'Cairo', sans-serif;" class="modal-title"
+                                                        id="exampleModalLabel">
+                                                        Modifier
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- edit_form -->
+                                                    <form action="{{ route('Themes.update', 'test') }}" method="post">
+                                                        {{ method_field('patch') }}
+                                                        @csrf
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="Name" class="mr-sm-2">Nom de la classe
+                                                                    :</label>
+                                                                <input id="Name" type="text" name="Name"
+                                                                    class="form-control"
+                                                                    value="{{ $Theme->Name_Theme }}" required>
+                                                                <input id="id" type="hidden" name="id"
+                                                                    class="form-control" value="{{ $Theme->id }}">
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="Name_en" class="mr-sm-2">Description
+                                                                    :</label>
+                                                                <input type="text" class="form-control"
+                                                                    value="{{ $Theme->Description_Theme }}"
+                                                                    name="Description" required>
+                                                            </div>
+                                                        </div><br>
+                                                        <div class="form-group">
+                                                            <label for="exampleFormControlTextarea1">Niveau
                                                                 :</label>
-                                                            <input id="Name" type="text" name="Name"
-                                                                class="form-control" value="{{ $Theme->Name_Theme }}"
-                                                                required>
-                                                            <input id="id" type="hidden" name="id"
-                                                                class="form-control" value="{{ $Theme->id }}">
+                                                            <select class="form-control form-control-lg"
+                                                                id="exampleFormControlSelect1" name="Domaine_id">
+
+                                                                @foreach ($Domaines as $Domaine)
+                                                                    <option value="{{ $Domaine->id }}">
+                                                                        {{ $Domaine->Name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+
                                                         </div>
-                                                        <div class="col">
-                                                            <label for="Name_en" class="mr-sm-2">Description
-                                                                :</label>
-                                                            <input type="text" class="form-control"
-                                                                value="{{ $Theme->Description_Theme }}"
-                                                                name="Description" required>
+                                                        <br><br>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Fermer</button>
+                                                            <button type="submit"
+                                                                class="btn btn-success">Enregistrer</button>
                                                         </div>
-                                                    </div><br>
-                                                    <div class="form-group">
-                                                        <label for="exampleFormControlTextarea1">Niveau
-                                                            :</label>
-                                                        <select class="form-control form-control-lg"
-                                                            id="exampleFormControlSelect1" name="Domaine_id">
+                                                    </form>
 
-                                                            @foreach ($Domaines as $Domaine)
-                                                                <option value="{{ $Domaine->id }}">
-                                                                    {{ $Domaine->Name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-
-                                                    </div>
-                                                    <br><br>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Fermer</button>
-                                                        <button type="submit"
-                                                            class="btn btn-success">Enregistrer</button>
-                                                    </div>
-                                                </form>
-
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- delete_modal_Domaine -->
-                                <div class="modal fade" id="delete{{ $Theme->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 style="font-family: 'Cairo', sans-serif;" class="modal-title"
-                                                    id="exampleModalLabel">
-                                                    Supprimer
-                                                </h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('Themes.destroy', 'test') }}" method="post">
-                                                    {{ method_field('Delete') }}
-                                                    @csrf
-                                                    Etes vous sûre de vouloir suprimer cette classe ?
-                                                    <input id="id" type="hidden" name="id"
-                                                        class="form-control" value="{{ $Theme->id }}">
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Fermer</button>
-                                                        <button type="submit"
-                                                            class="btn btn-danger">Supprimer</button>
-                                                    </div>
-                                                </form>
+                                    <!-- delete_modal_Domaine -->
+                                    <div class="modal fade" id="delete{{ $Theme->id }}" tabindex="-1"
+                                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 style="font-family: 'Cairo', sans-serif;" class="modal-title"
+                                                        id="exampleModalLabel">
+                                                        Supprimer
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('Themes.destroy', 'test') }}"
+                                                        method="post">
+                                                        {{ method_field('Delete') }}
+                                                        @csrf
+                                                        Etes vous sûre de vouloir suprimer cette classe ?
+                                                        <input id="id" type="hidden" name="id"
+                                                            class="form-control" value="{{ $Theme->id }}">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Fermer</button>
+                                                            <button type="submit"
+                                                                class="btn btn-danger">Supprimer</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

@@ -9,7 +9,8 @@
     {
       "menuHeader": "Permissions",
       "roles": [
-        "admin"
+        "admin",
+        "formateur"
       ]
     },
     {
@@ -17,7 +18,8 @@
       "icon": "menu-icon tf-icons bx bx bx-user",
       "slug": "admin",
       "roles": [
-        "admin"
+        "admin",
+        "formateur"
       ],
       "submenu": [
         {
@@ -41,7 +43,9 @@
       "slug": "candidat",
       "roles": [
         "planificateur",
-        "chefFormation"
+        "chefFormation",
+        "admin",
+        "formateur"
       ],
       "submenu": [
         {
@@ -62,6 +66,7 @@
       "slug": "presence.index",
       "url": "presence",
       "roles": [
+        "admin",
         "formateur"
       ]
     },
@@ -70,7 +75,9 @@
       "icon": "menu-icon tf-icons bx bx-calendar",
       "slug": "planing",
       "roles": [
-        "planificateur"
+        "planificateur",
+        "admin",
+        "formateur"
       ],
       "submenu": [
         {
@@ -86,6 +93,7 @@
       "roles": [
         "planificateur",
         "chefFormation",
+        "formateur",
         "admin"
       ],
       "slug": "school",

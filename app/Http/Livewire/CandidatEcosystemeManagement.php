@@ -11,7 +11,7 @@ class CandidatEcosystemeManagement extends Component
 {
     use WithPagination;
 
-    public $pageSize = 10;
+    public $page_size = 10;
     public $search = '';
     public $groupe_id;
     public $groupe;
@@ -30,7 +30,7 @@ class CandidatEcosystemeManagement extends Component
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('prenom', 'like', '%' . $this->search . '%');
             })
-            ->paginate($this->pageSize);
+            ->paginate($this->page_size);
         return view("livewire.candidat-ecosysteme-management", compact('candidats'))->extends('layouts.contentNavbarLayout')
             ->section('content');
     }

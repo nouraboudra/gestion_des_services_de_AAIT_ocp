@@ -25,5 +25,6 @@ class CandidatOcpSeeder extends Seeder
         $user->password = Hash::make("test");
         $ocps->candidat()->save($candidat);
         $candidat->user()->save($user);
+        $user->save();
     }
 }

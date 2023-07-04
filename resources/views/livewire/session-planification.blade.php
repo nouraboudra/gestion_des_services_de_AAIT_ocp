@@ -19,7 +19,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
-                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                    <select id="page-size" class="form-select form-select-sm" wire:model="page_size">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -296,7 +296,7 @@
 
             // Add the new options to the 'salle_id' select
             $.each(data.salles, function(index, salle) {
-                salleSelect.append(new Option(salle.code, salle.id));
+                salleSelect.append(new Option(salle.intitule, salle.id));
             });
             $.each(data.groupes, function(index, groupe) {
                 var option = new Option(groupe.nom, groupe.id);

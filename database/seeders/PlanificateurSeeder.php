@@ -21,6 +21,7 @@ class PlanificateurSeeder extends Seeder
       $planificateur->save();
       $user->assignRole('planificateur');
       $planificateur->user()->save($user);
+      $user->save();
     });
   }
 }

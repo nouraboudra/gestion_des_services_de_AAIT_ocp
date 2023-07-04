@@ -18,14 +18,14 @@ class UsersController extends Controller
     {
 
         $search = $request->query('search');
-        $pageSize = $request->query('page_size', 10);
+        $page_size = $request->query('page_size');
 
         $users = User::where(function ($query) use ($search) {
             $query->where('Matricule', 'like', '%' . $search . '%')
                 ->orWhere('nom', 'like', '%' . $search . '%')
                 ->orWhere('prenom', 'like', '%' . $search . '%')
                 ->orWhere('email', 'like', '%' . $search . '%');
-        })->paginate($pageSize);
+        })->paginate($page_size);
         return view('content.Admin.Admin-showuser')->with('users', $users);
     }
     public function create()

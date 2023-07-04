@@ -252,6 +252,8 @@
             }
             // Update Livewire component property
             @this.set('selectedCandidates', selectedCandidates);
+            selectedCandidates = [];
+            console.log(selectedCandidates);
             window.livewire.emit('selectCandidat', selectedCandidates);
         }
 

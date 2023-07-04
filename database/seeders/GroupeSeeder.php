@@ -21,6 +21,7 @@ class GroupeSeeder extends Seeder
 
         Groupe::factory()->count(5)->create()->each(function ($groupe) {
             User::factory()->count(10)->create()->each(function ($user) use ($groupe) {
+                $user->assignRole('candidat_ocp');
                 $candidatOcp = CandidatOcp::factory()->create();
                 $candidat = new Candidat();
                 $candidatOcp->candidat()->save($candidat);
@@ -28,6 +29,7 @@ class GroupeSeeder extends Seeder
                 $candidat->save();
                 $candidat->user()->save($user);
                 $groupe->candidats()->attach($candidat);
+                $user->save();
             });
         });
     }

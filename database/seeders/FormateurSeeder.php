@@ -22,6 +22,7 @@ class FormateurSeeder extends Seeder
       $formateur->save();
       $user->assignRole('formateur');
       $formateur->user()->save($user);
+      $user->save();
     });
   }
 }

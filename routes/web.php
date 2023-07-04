@@ -212,6 +212,7 @@ Route::middleware('auth')->group(function () {
 Route::get('login', [LoginBasic::class, 'index'])->name('login');
 Route::get('register', [RegisterController::class, 'index'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::prefix('auth')->group(function () {
   // Handle the routes that start with 'auth'
@@ -271,30 +272,30 @@ Route::get('/tables/ocp', [Basic::class, 'index'])->name('tables-ocp');
 
 
 
-   //========Domaine=========
-    Route::resource('Domaines', DomaineController::class);
+//========Domaine=========
+Route::resource('Domaines', DomaineController::class);
 
 
 //========Themes=========
-    Route::resource('Themes', ThemesThemeController::class)->except(['show']);
-    //Route::get('Themes', [ThemesThemeController::class, 'index']);
+Route::resource('Themes', ThemesThemeController::class)->except(['show']);
+//Route::get('Themes', [ThemesThemeController::class, 'index']);
 
-    Route::post('delete_all', [ThemesThemeController::class,'delete_all'])->name('delete_all');
+Route::post('delete_all', [ThemesThemeController::class, 'delete_all'])->name('delete_all');
 
-    Route::post('Filter_Classes',[ThemesThemeController::class,'Filter_Classes'])->name('Filter_Classes');
+Route::post('Filter_Classes', [ThemesThemeController::class, 'Filter_Classes'])->name('Filter_Classes');
 
 //========Library=========
-    Route::resource('library',LibraryController::class);
-    Route::get('/classes/{id}', [LibraryController::class,'getclasses']);
-    Route::get('download_file/{filename}', [LibraryController::class,'downloadAttachment'])->name('downloadAttachment');
+Route::resource('library', LibraryController::class);
+Route::get('/classes/{id}', [LibraryController::class, 'getclasses']);
+Route::get('download_file/{filename}', [LibraryController::class, 'downloadAttachment'])->name('downloadAttachment');
 
 //========Exam=========
-    Route::resource('Exams',ExamController::class);
+Route::resource('Exams', ExamController::class);
 
 //========Question=========
-    Route::resource('questions',QuestionController::class);
+Route::resource('questions', QuestionController::class);
 
 //========Candidat Exam=========
-    Route::resource('candidat_exams',CandidatExamController::class);
+Route::resource('candidat_exams', CandidatExamController::class);
 //========DASHBOARD=========
 Route::get('/board', [HomeController::class, 'index'])->name('board');

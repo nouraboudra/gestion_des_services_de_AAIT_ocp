@@ -24,7 +24,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
-                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                    <select id="page-size" class="form-select form-select-sm">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -82,7 +82,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $users->appends(['search' => $search, 'page_size' => $pageSize])->withQueryString()->links('pagination.custom-pagination-links-view') }}
+                {{ $users->appends(['search' => $search, 'page_size' => $page_size])->withQueryString()->links('pagination.custom-pagination-links-view') }}
 
             </div>
 

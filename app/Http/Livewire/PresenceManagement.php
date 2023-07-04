@@ -100,7 +100,7 @@ class PresenceManagement extends Component
         $groupe = Groupe::find($this->groupe->id);
         $groupe->candidats()->detach([$candidatId]);
         toastr()->success("cadidat supprimé avec succes");
-        $this->reset(['search']);
+        $this->reset(['search', 'selectedCandidates']);
         $this->mount();
         $this->render();
     }
@@ -135,7 +135,7 @@ class PresenceManagement extends Component
         $groupe->candidats()->attach([$candidatId]);
 
         toastr()->success("cadidat remplacé avec succes");
-        $this->reset(['search']);
+        $this->reset(['search', 'selectedCandidates']);
         $this->emit('hideModal');
 
         $this->mount();
@@ -160,7 +160,7 @@ class PresenceManagement extends Component
         $groupe->candidats()->attach($this->selectedCandidates);
         toastr()->success("cadidats sont ajoutés avec succes");
         $this->emit('hideModal');
-        $this->reset(['search']);
+        $this->reset(['search',]);
         $this->mount();
         $this->render();
     }
@@ -199,8 +199,11 @@ class PresenceManagement extends Component
                 ->whereDate('date', $today)
                 ->delete();
         }
+        $this->search = '';
+
         Toastr::success("L'absences sont enregistrées avec succès ({$absentCount})");
         return redirect()->back();
+
     }
 
     public function updatedSearch()

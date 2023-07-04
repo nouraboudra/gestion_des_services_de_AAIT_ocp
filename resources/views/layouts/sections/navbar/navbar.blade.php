@@ -70,7 +70,8 @@
                             </div>
                             <div class="flex-grow-1">
                                 <span class="fw-semibold d-block">{{ Auth::user()->nom }}</span>
-                                <small class="text-muted">{{ Auth::user()->roles[0]->name }}</small>
+                                <small
+                                    class="text-muted">{{ str_replace('_', ' ', Auth::user()->roles[0]->name) }}</small>
                             </div>
                         </div>
                     </a>

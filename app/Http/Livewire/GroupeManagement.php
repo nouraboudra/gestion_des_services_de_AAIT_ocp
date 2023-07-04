@@ -16,7 +16,7 @@ class GroupeManagement extends Component
 {
     use WithPagination;
 
-    public $pageSize = 5;
+    public $page_size = 5;
     public $selectedCandidates = [];
     public $searchResults;
     public $userType = '';
@@ -37,7 +37,7 @@ class GroupeManagement extends Component
         $groupes = Groupe::where(function ($query) {
             $query->where('nom', 'like', '%' . $this->search . '%')
                 ->orWhere('capacite', 'like', '%' . $this->search . '%');
-        })->paginate($this->pageSize);
+        })->paginate($this->page_size);
 
         return view('livewire.groupe-management', compact('groupes'))
             ->extends('layouts.contentNavbarLayout')
@@ -101,18 +101,18 @@ class GroupeManagement extends Component
         $candidats = [];
         if ($this->userType === 'ocp') {
             $candidats = Candidat::whereHas('user', function ($query) {
-                $query->where('nom', 'like', '%' . $this->search . '%')
-                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
-                    ->orWhere('matricule', 'like', '%' . $this->search . '%');
+                $query->where('nom', 'like', '%' . $this->searchMembers . '%')
+                    ->orWhere('prenom', 'like', '%' . $this->searchMembers . '%')
+                    ->orWhere('matricule', 'like', '%' . $this->searchMembers . '%');
             })
                 ->where('candidatable_type', CandidatOcp::class)
                 ->get();
             $candidats = $candidats->load('user');
         } elseif ($this->userType === 'ecosysteme') {
             $candidats = Candidat::whereHas('user', function ($query) {
-                $query->where('nom', 'like', '%' . $this->search . '%')
-                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
-                    ->orWhere('matricule', 'like', '%' . $this->search . '%');
+                $query->where('nom', 'like', '%' . $this->searchMembers . '%')
+                    ->orWhere('prenom', 'like', '%' . $this->searchMembers . '%')
+                    ->orWhere('matricule', 'like', '%' . $this->searchMembers . '%');
             })
                 ->where('candidatable_type', CandidatEcosysteme::class)
                 ->get();

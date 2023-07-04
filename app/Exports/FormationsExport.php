@@ -22,7 +22,7 @@ class FormationsExport implements FromCollection, WithHeadings, WithMapping, Sho
 
     public function headings(): array
     {
-        return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        return ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
     }
 
     public function map($formation): array
@@ -34,7 +34,7 @@ class FormationsExport implements FromCollection, WithHeadings, WithMapping, Sho
         foreach ($formation->sessionFormations as $session) {
             $dayOfWeek = Carbon::parse($session->date_debut)->dayOfWeek;
             // Concatenate the formation name and the session title with a newline
-            $week[$dayOfWeek] = $formation->Intitulé . "\n" . $session->intitule;
+            $week[$dayOfWeek] = $formation->Intitulé . "\n" . $session->intitule . "\n" . $session->formateur->user->nom . "\n" . $session->groupe->nom;
         }
 
         return $week;

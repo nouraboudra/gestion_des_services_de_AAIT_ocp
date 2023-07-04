@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
-                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                    <select id="page-size" class="form-select form-select-sm" wire:model="page_size">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -142,24 +142,27 @@
 
     document.addEventListener('livewire:load', function() {
         @this.on(`searchResultsUpdated`, function(data) {
-
             let searchResultsElement = document.getElementById('searchResults');
             searchResultsElement.innerHTML = '';
+
+            // Delete the previous search results before showing new ones
+            while (searchResultsElement.firstChild) {
+                searchResultsElement.firstChild.remove();
+            }
+
             data.forEach(result => {
-                console.log(result);
 
                 let itemHTML = `
-            <a href="#" id="candidate-${result.id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="selectCandidate(${result.id})">
-                <div>
-                    <p class="mb-0">${result.user.nom} ${result.user.prenom}</p>
-                </div>
-                <div>
-                    <i id="checkmark-${result.id}" class="${selectedCandidates.includes(result.id) ? '' : 'd-none'} bx bx-check"></i>
-                </div>
-            </a>
-        `;
+                <a href="#" id="candidate-${result.id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="selectCandidate(${result.id})">
+                    <div>
+                        <p class="mb-0">${result.user.nom} ${result.user.prenom}</p>
+                    </div>
+                    <div>
+                        <i id="checkmark-${result.id}" class="${selectedCandidates.includes(result.id) ? '' : 'd-none'} bx bx-check"></i>
+                    </div>
+                </a>
+            `;
                 searchResultsElement.innerHTML += itemHTML;
-
             });
         });
 
@@ -193,6 +196,7 @@
         }
         // Update Livewire component property
         @this.set('selectedCandidates', selectedCandidates);
+        selectedCandidates = []
         window.livewire.emit('selectCandidat', selectedCandidates);
 
 

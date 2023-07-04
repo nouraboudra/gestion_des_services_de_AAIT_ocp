@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <div class="form-group">
                     <label for="page-size" class="form-label">Taille de la page:</label>
-                    <select id="page-size" class="form-select form-select-sm" wire:model="pageSize">
+                    <select id="page-size" class="form-select form-select-sm" wire:model="page_size">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>

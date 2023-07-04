@@ -14,7 +14,7 @@ use Yoeunes\Toastr\Facades\Toastr;
 class FormateursManagement extends Component
 {
     use WithPagination;
-    public $pageSize = 5;
+    public $page_size = 5;
 
     public $search = '';
     public $nom;
@@ -53,7 +53,7 @@ class FormateursManagement extends Component
                     ->orWhere('email', 'like', '%' . $this->search . '%')
                     ->orWhere('matricule', 'like', '%' . $this->search . '%');
             });
-        })->paginate($this->pageSize);
+        })->paginate($this->page_size);
         return view('livewire.formateurs-management', compact('formateurs'))->extends('layouts.contentNavbarLayout')->section('content');
     }
 

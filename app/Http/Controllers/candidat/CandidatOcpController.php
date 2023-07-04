@@ -14,12 +14,12 @@ class CandidatOcpController extends Controller
 
     public function index(Request $request)
     {
-        $pageSize = $request->input('page_size', 10); // Default page size is 10
+        $page_size = $request->input('page_size', 10); // Default page size is 10
 
         $roles = Role::all();
         $users = User::with('roles')->get();
-        $candidats = CandidatOcp::paginate($pageSize); // Retrieve all candidats from the database
-        return view("content.management.candidat-ocp-index", compact('candidats', 'pageSize'));
+        $candidats = CandidatOcp::paginate($page_size); // Retrieve all candidats from the database
+        return view("content.management.candidat-ocp-index", compact('candidats', 'page_size'));
     }
 
 

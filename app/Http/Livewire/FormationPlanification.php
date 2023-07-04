@@ -17,7 +17,7 @@ class FormationPlanification extends Component
   use WithPagination;
 
 
-  public $pageSize = 5;
+  public $page_size = 5;
 
   public $search = '';
 
@@ -37,7 +37,7 @@ class FormationPlanification extends Component
       $query->where('Intitulé', 'like', '%' . $this->search . '%')
         ->orWhere('date_debut', 'like', '%' . $this->search . '%')
         ->orWhere('date_fin', 'like', '%' . $this->search . '%');
-    })->paginate($this->pageSize);
+    })->paginate($this->page_size);
     $this->events = $this->getFormations();
     $this->themes = Theme::all();
 
@@ -59,7 +59,7 @@ class FormationPlanification extends Component
     $colors = ['#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
 
     $events = [];
-    $formations = Formation::select('id', 'Intitulé as title', 'date_debut as start', 'date_fin as end')->paginate($this->pageSize);
+    $formations = Formation::select('id', 'Intitulé as title', 'date_debut as start', 'date_fin as end')->paginate($this->page_size);
     foreach ($formations as $key => $formation) {
       $events[] = [
         'id' => $formation->id,

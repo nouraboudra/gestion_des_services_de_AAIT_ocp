@@ -18,7 +18,7 @@ use Livewire\WithPagination;
 class SessionPlanification extends Component
 {
   use WithPagination;
-  public $pageSize = 5;
+  public $page_size = 5;
   public $search = '';
 
 
@@ -78,7 +78,7 @@ class SessionPlanification extends Component
             });
           });
       })
-      ->paginate($this->pageSize);
+      ->paginate($this->page_size);
 
     $this->events = $this->getSessions();
     $this->domains = Domain::all();
@@ -115,7 +115,7 @@ class SessionPlanification extends Component
 
     $events = [];
 
-    $sessions = SessionFormation::where('formation_id', $this->formation_id)->paginate($this->pageSize);
+    $sessions = SessionFormation::where('formation_id', $this->formation_id)->paginate($this->page_size);
     ;
 
     foreach ($sessions as $key => $session) {

@@ -27,5 +27,6 @@ class EcosystemSeeder extends Seeder
         $user->email = User::where('email', "noura.boudra1@gmail.com")->first() ? $user->email : "noura.boudra1@gmail.com";
         $ecosys->candidat()->save($candidat);
         $candidat->user()->save($user);
+        $user->save();
     }
 }
