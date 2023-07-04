@@ -15,8 +15,17 @@ class LoginBasic extends Controller
   public function index()
   {
     if (Auth::check()) {
-      /** @var \App\Models\User */ //this code for preventing the error : Undefined method 'hasRole'
+      /** @var \App\Models\User *///this code for preventing the error : Undefined method 'hasRole'
       $user = Auth::user();
+      $roles = $user->roles;
+
+      foreach ($roles as $role) {
+
+        if (str_starts_with($role->name, 'candidat')) {
+          return redirect()->route('board');
+        }
+      }
+
       if ($user->hasRole("candidat_ecosystem")) {
         $ecosystemUser = CandidatEcosysteme::where('cin', $user->matricule)->first();
         if ($ecosystemUser && $ecosystemUser->first_time) {
@@ -64,7 +73,16 @@ class LoginBasic extends Controller
       }
       $request->session()->regenerate();
       auth()->login($user);
-      toastr()->success('Bienvenue ' . Auth::user()->nom);
+
+      toastr()->success('Connecté', 'Bienvenue ' . Auth::user()->nom);
+      $roles = $user->roles;
+
+      foreach ($roles as $role) {
+
+        if (str_starts_with($role->name, 'candidat')) {
+          return redirect()->route('board');
+        }
+      }
       return redirect()->intended('dashboard');
     }
     toastr()->error('verifier votre crédentiel');

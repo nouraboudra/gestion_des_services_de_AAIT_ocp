@@ -212,7 +212,7 @@ Route::middleware('auth')->group(function () {
 Route::get('login', [LoginBasic::class, 'index'])->name('login');
 Route::get('register', [RegisterController::class, 'index'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('get-logout');
 
 Route::prefix('auth')->group(function () {
   // Handle the routes that start with 'auth'
